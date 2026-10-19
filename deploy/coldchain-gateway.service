@@ -1,0 +1,19 @@
+# Servico systemd do gateway no Raspberry Pi (sobe sozinho ao ligar).
+# Instalar (ajuste User e caminhos se o repositorio nao estiver em /home/pi/softwareMNR):
+#   sudo cp deploy/coldchain-gateway.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now coldchain-gateway
+#   journalctl -u coldchain-gateway -f
+[Unit]
+Description=MNR 2026 - gateway cadeia de frio (ponte serial + tela)
+After=network.target
+
+[Service]
+User=pi
+WorkingDirectory=/home/pi/softwareMNR
+Environment=PYTHONPATH=/home/pi/softwareMNR/src
+ExecStart=/home/pi/softwareMNR/.venv/bin/python -m coldchain.webapp --demo-controls --host 0.0.0.0
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
