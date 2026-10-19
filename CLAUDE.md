@@ -23,7 +23,7 @@ Fluxo: `Sensor -> No (ESP32) -> LoRa -> Gateway (Heltec por USB + Raspberry Pi) 
 - Pedido do AliExpress feito em 19/10/2026 e **ja enviado** (confirmado em 19/10 a noite). Janela de entrega informada: **30/10 a 10/11**. Nao precisa mais cancelar nem comprar nacional. Ate as pecas chegarem, desenvolver sem hardware (Python, vetores, firmware que compila). Plano B se o hardware nao funcionar ate 5/11: apresentar simulacao + gateway + video, com tabela "Artigo x demonstracao".
 
 ## Decisoes tecnicas
-- Curva: **P-256 (secp256r1)** em software e firmware (padrao atual). O artigo usou secp256k1 (biblioteca Python `ecdsa`, seed 42) e planeja micro-ecc, que suporta as duas. **Decisao pendente do Vini:** manter P-256 (declarar a diferenca) ou trocar para secp256k1 (mudar `CURVE` em crypto.py e regenerar vetores).
+- Curva: **P-256 (secp256r1)** em software e firmware (padrao atual). O artigo usou secp256k1 (biblioteca Python `ecdsa`, seed 42) e planeja micro-ecc, que suporta as duas. **Decidido em 19/10 (issue #9): manter P-256**, declarada como evolucao do prototipo (padrao IoT, compativel com ATECC608 e AWS IoT). Ver `docs/DECISOES.md`.
 - Assinatura em formato bruto **r||s (64 bytes)**, nao DER. O pacote total tem 88 bytes (24 payload + 64 assinatura), cabe no limite do LoRa (255).
 - Hash SHA-256 sobre o payload. Anti-replay por `seq` monotonico por no.
 - Chave privada embutida no firmware so no prototipo. Em producao: elemento seguro.
