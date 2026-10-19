@@ -87,7 +87,7 @@ class GatewayTests(unittest.TestCase):
 
     def test_rejects_tampered_payload(self):
         pkt = bytearray(self.node.make_packet(8.6))
-        pkt[13] ^= 0x01  # altera um byte da temperatura
+        pkt[12] ^= 0x01  # altera um bit da temperatura (bytes 11-12)
         self.assertEqual(self.gw.receive(bytes(pkt)).result, Result.BAD_SIGNATURE)
         self.assertEqual(len(self.ledger.blocks()), 0)
 
@@ -121,11 +121,12 @@ class LedgerTests(unittest.TestCase):
         gw = Gateway(ledger, {1: key.public_key()})
         for t in (5.0, 5.2, 4.9, 5.1):
             gw.receive(node.make_packet(t))
-        self.assertEqual(ledger.verify_chain(), (True, None))
+        self.assertEqual(ledger.verify_chain(), (True, None, None))
         ledger.db.execute("UPDATE blocks SET payload=? WHERE idx=2", (b"\x00" * 24,))
-        ok, bad = ledger.verify_chain()
+        ok, bad, reason = ledger.verify_chain()
         self.assertFalse(ok)
         self.assertEqual(bad, 2)
+        self.assertEqual(reason, "hash_quebrado")
 
 
 if __name__ == "__main__":
