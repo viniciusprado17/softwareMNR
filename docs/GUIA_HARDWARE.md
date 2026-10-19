@@ -18,7 +18,7 @@ pio --version
 - Alternativa gráfica: VS Code + extensão **PlatformIO IDE**, abrindo cada pasta `firmware/node`, `firmware/receiver`, `firmware/vectest`.
 - Linux: `sudo usermod -aG dialout $USER` e fazer logout/login para acessar a porta serial.
 - A Heltec V3 usa ponte USB-serial CP2102: no Linux aparece como `/dev/ttyUSB0`, no Windows como `COMx` (instalar o driver CP210x da Silicon Labs se não aparecer).
-- As versões estão **fixadas** nos `platformio.ini` (espressif32 6.9.0 = core Arduino-ESP32 2.0.17, RadioLib 6.6.0, micro-ecc num commit fixo). Não atualize sem testar.
+- As versões estão **fixadas** nos `platformio.ini` (espressif32 6.9.0 = core Arduino-ESP32 2.0.17, RadioLib 6.6.0; a micro-ecc vem copiada no repositório, commit fixo). Não atualize sem testar.
 
 A primeira compilação baixa o toolchain do ESP32 (algumas centenas de MB). O CI do GitHub já compila os três firmwares a cada push.
 

@@ -3,5 +3,11 @@
   "version": "1.0.0",
   "description": "Pacote v1 (88 bytes), SHA-256 e ECDSA P-256 (micro-ecc) do projeto MNR 2026. Portatil: compila no ESP32 e no PC.",
   "frameworks": "*",
-  "platforms": "*"
+  "platforms": "*",
+  "build": {
+    "srcFilter": [
+      "+<*>",
+      "-<uecc/uECC.c>"
+    ]
+  }
 }

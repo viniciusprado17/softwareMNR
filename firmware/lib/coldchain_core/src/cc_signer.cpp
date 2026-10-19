@@ -1,6 +1,7 @@
 #include "cc_signer.h"
 
-#include <uECC.h>
+#include "cc_uecc_rename.h"
+#include "uecc/uECC.h"
 
 #include "cc_sha256.h"
 
