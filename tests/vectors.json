@@ -1,0 +1,86 @@
+{
+  "aviso": "Chave publica de teste. Nao usar em producao nem na demonstracao.",
+  "curve": "secp256r1",
+  "private_key_hex": "1f1e1d1c1b1a191817161514131211100f0e0d0c0b0a09080706050403020101",
+  "public_key_hex": "0497cecc7f5f1a64d5c47303a6b22504d9e28628cf61b22d0a7fe60f4d5a394173f38523b3938248324cbcdfce9bc60f795107dac28142a89a95269833b67d546f",
+  "vectors": [
+    {
+      "reading": {
+        "node_id": 1,
+        "seq": 1,
+        "ts": 1800000000,
+        "temp_c": 5.25,
+        "hum_pct": 43.5,
+        "status": 0,
+        "lat": -10.9472,
+        "lon": -37.0731
+      },
+      "payload_hex": "010001000000016b49d200020d10fe00ff58f580fdca4f34",
+      "sig_hex": "7e58b440f81f32a0c22f5ae39d067e50901dd35e532a905436eb36c0a7a570ac51baa4fd0e982ba482061445a7ae3a1e8c804fda277d9d016d0697fb045329f9",
+      "packet_hex": "010001000000016b49d200020d10fe00ff58f580fdca4f347e58b440f81f32a0c22f5ae39d067e50901dd35e532a905436eb36c0a7a570ac51baa4fd0e982ba482061445a7ae3a1e8c804fda277d9d016d0697fb045329f9",
+      "expect": "valid"
+    },
+    {
+      "reading": {
+        "node_id": 1,
+        "seq": 2,
+        "ts": 1800000010,
+        "temp_c": 7.8,
+        "hum_pct": 40.0,
+        "status": 1,
+        "lat": null,
+        "lon": null
+      },
+      "payload_hex": "010001000000026b49d20a030c0fa0017fffffff7fffffff",
+      "sig_hex": "65f6bc0171855b4f51d9a9cf80542c3e82352a759239383f65e6e48d2190db37bd236970d5accda89ae6261699950a925aa9863645d749273676d045f18d7abc",
+      "packet_hex": "010001000000026b49d20a030c0fa0017fffffff7fffffff65f6bc0171855b4f51d9a9cf80542c3e82352a759239383f65e6e48d2190db37bd236970d5accda89ae6261699950a925aa9863645d749273676d045f18d7abc",
+      "expect": "valid"
+    },
+    {
+      "reading": {
+        "node_id": 1,
+        "seq": 3,
+        "ts": 1800000020,
+        "temp_c": 8.6,
+        "hum_pct": 38.25,
+        "status": 2,
+        "lat": null,
+        "lon": null
+      },
+      "payload_hex": "010001000000036b49d214035c0ef1027fffffff7fffffff",
+      "sig_hex": "24aae7d6833ddb22949d2e405765d1400d97d6211e135ea8466b7a75c293f3ba38713a9a34fbbf9dfe6c981b84aa447e2a02f705f0969f1ed7a62cf12da72718",
+      "packet_hex": "010001000000036b49d214035c0ef1027fffffff7fffffff24aae7d6833ddb22949d2e405765d1400d97d6211e135ea8466b7a75c293f3ba38713a9a34fbbf9dfe6c981b84aa447e2a02f705f0969f1ed7a62cf12da72718",
+      "expect": "valid"
+    },
+    {
+      "reading": {
+        "node_id": 1,
+        "seq": 4,
+        "ts": 0,
+        "temp_c": -3.5,
+        "hum_pct": 90.0,
+        "status": 2,
+        "lat": null,
+        "lon": null
+      },
+      "payload_hex": "0100010000000400000000fea22328027fffffff7fffffff",
+      "sig_hex": "06384b231c39b6c6089c86f05fe3c763574a10c538e73ff5159e2508831abc54e5dbaf1297512e80c1644c4a11a05caf6197a28bd6f042467c2f0bc5f4b81221",
+      "packet_hex": "0100010000000400000000fea22328027fffffff7fffffff06384b231c39b6c6089c86f05fe3c763574a10c538e73ff5159e2508831abc54e5dbaf1297512e80c1644c4a11a05caf6197a28bd6f042467c2f0bc5f4b81221",
+      "expect": "valid"
+    },
+    {
+      "note": "1 bit alterado no payload",
+      "payload_hex": "010001000000016b49d200020d11fe00ff58f580fdca4f34",
+      "sig_hex": "7e58b440f81f32a0c22f5ae39d067e50901dd35e532a905436eb36c0a7a570ac51baa4fd0e982ba482061445a7ae3a1e8c804fda277d9d016d0697fb045329f9",
+      "packet_hex": "010001000000016b49d200020d11fe00ff58f580fdca4f347e58b440f81f32a0c22f5ae39d067e50901dd35e532a905436eb36c0a7a570ac51baa4fd0e982ba482061445a7ae3a1e8c804fda277d9d016d0697fb045329f9",
+      "expect": "invalid"
+    },
+    {
+      "note": "1 bit alterado na assinatura",
+      "payload_hex": "010001000000016b49d200020d10fe00ff58f580fdca4f34",
+      "sig_hex": "7e58b440f81f32a0c22f5ae39d067e50901dd35e532a905436eb36c0a7a570ac51baa4fd0e982ba482061445a7ae3a1e8c804fda277d9d016d0697fb045329f8",
+      "packet_hex": "010001000000016b49d200020d10fe00ff58f580fdca4f347e58b440f81f32a0c22f5ae39d067e50901dd35e532a905436eb36c0a7a570ac51baa4fd0e982ba482061445a7ae3a1e8c804fda277d9d016d0697fb045329f8",
+      "expect": "invalid"
+    }
+  ]
+}

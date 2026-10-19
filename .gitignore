@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# Dados locais do gateway
+*.db
+*.sqlite
+*.sqlite3
+logs/
+reports/*.csv
+
+# Segredos: NUNCA commitar chaves privadas, certificados ou credenciais
+firmware/include/keys.h
+keys/*.pem
+keys/private/
+*.key
+*.crt
+certs/
+.env
+
+# PlatformIO
+.pio/
+.vscode/
