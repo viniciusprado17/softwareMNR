@@ -53,15 +53,16 @@ Diferencas a declarar (ver Secoes 1.3 e 13 da especificacao):
 - frequencia: o artigo nao cita; usar 915 MHz.
 A Tabela 3 do artigo (evolucoes propostas) e o roteiro: SHT31 real, latencia real, chaves no ESP32, ataque coordenado, limiares parametrizaveis.
 
-## Estado do codigo
-- `src/coldchain/`: pacote binario, cripto P-256, decisao termica, ledger SQLite com hash chain, gateway, simulador de no. Roda sem hardware.
-- `tests/vectors.json` + `tools/gen_vectors.py`: vetores dourados para validar o firmware contra o Python.
-- `tools/repro_artigo.py`: reproduz os testes do artigo.
-- `tests/`: unittest (rodar: `python -m unittest discover -s tests`).
-- `firmware/`: ainda vazio. Proximo passo: sketch PlatformIO/Arduino para Heltec V3 (RadioLib + mbedTLS/micro-ecc).
+## Estado do codigo (atualizado 19/10)
+- Bloco A (A1..A8) feito e testado (56 testes): `python -m unittest discover -s tests`.
+- `src/coldchain/`: pacote, cripto P-256, decisao, ledger (colunas extras, tabela `events`, `verify_chain(keys)` -> `ChainCheck(ok, bad_idx, reason)`, migracao, bloco `resync`), gateway (status recalculado -> `status_divergente`, silencio, RSSI/SNR, eventos de rejeicao, `--reset-node`), `serial_bridge.py` (+ `--simulate`), `config.py` (`config.toml`, `keys/nodes.json`), `webapp.py` + `static/` (tela, API da Secao 10.5, `--demo-controls`).
+- `firmware/`: PlatformIO para Heltec V3. `lib/coldchain_core` (pacote, SHA-256 proprio, ECDSA micro-ecc deterministico, autoteste) e portavel; `bash firmware/test_host/run.sh` compila no PC e o Python confere as assinaturas. `node/`, `receiver/`, `vectest/` escritos mas **nunca gravados em placa** (sem hardware ainda). O CI compila os tres.
+- `tools/`: `provision_node.py` (chaves -> `keys.h`/`nodes.json`), `check_fw_output.py` (confere serial), `bench_python.py` (A8), `airtime.py`, `gen_vectors.py`, `gen_firmware_vectors.py`, `repro_artigo.py`.
+- Guia do Bloco B: `docs/GUIA_HARDWARE.md`. Medicoes: `docs/MEDICOES.md`. Diferencas: `docs/ARTIGO_X_DEMONSTRACAO.md`. Decisoes: `docs/DECISOES.md`.
+- Tela sem hardware: `./run_gateway.sh --simulate --demo-controls` (http://127.0.0.1:8000).
 
 ## Convencoes
-- Python 3.10+, dependencia unica: `cryptography`. Sem frameworks pesados.
+- Python 3.10+. Dependencias: `cryptography`, `pyserial`, `fastapi`, `uvicorn` (`requirements.txt`; 3.10 tambem `tomli`). Sem frameworks pesados.
 - O formato do pacote e a fonte da verdade em `packet.py`; o firmware deve espelhar byte a byte (big-endian).
 - Antes de mudar o formato do pacote, atualizar `docs/PACOTE.md` e os testes.
 - Comentarios e docs em portugues, codigo em ingles.

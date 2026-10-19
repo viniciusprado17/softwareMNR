@@ -24,3 +24,5 @@ certs/
 # PlatformIO
 .pio/
 .vscode/
+keys/nodes.json
+firmware/.host_build/

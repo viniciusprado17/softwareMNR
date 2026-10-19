@@ -1,0 +1,31 @@
+# Configuracao do gateway (Raspberry Pi). Caminhos relativos a raiz do repositorio.
+# Nenhum valor magico no codigo: ajuste aqui.
+
+[gateway]
+db_path = "coldchain.db"          # ledger SQLite (":memory:" para nao gravar)
+keys_file = "keys/nodes.json"     # chaves publicas confiaveis, gerado por tools/provision_node.py
+log_file = "logs/gateway.log"
+allow_resync = false              # --reset-node; manter desligado por padrao
+
+[thresholds]                      # faixa termica (vacinas: 2 a 8 C)
+low = 2.0
+high = 8.0
+margin = 0.5                      # faixa de ALERTA antes de cruzar o limite
+
+[serial]                          # Heltec receptora por USB
+port = "/dev/ttyUSB0"             # Heltec V3 usa ponte CP2102 (ttyUSB0); confira com: ls /dev/tty*
+baud = 115200
+reconnect_s = 2.0
+
+[node]
+expected_interval_s = 10.0        # bancada: 10 s. Referencia do artigo: 60 s
+silence_factor = 3                # evento "silencio" apos N intervalos sem pacote
+
+[web]
+host = "127.0.0.1"                # use "0.0.0.0" para abrir de outro computador
+port = 8000
+
+[sim]                             # modo --simulate (sem hardware)
+node_id = 1
+interval_s = 2.0
+seed = 42

@@ -48,11 +48,16 @@ def main() -> None:
     print("  resultado:", gw.receive(intruder.make_packet(5.0)).result.value)
 
     print("\n== 5. Integridade do ledger ==")
-    ok, bad = ledger.verify_chain()
-    print(f"  blocos={len(ledger.blocks())} cadeia_ok={ok}")
+    check = ledger.verify_chain(gw.keys)
+    print(f"  blocos={len(ledger.blocks())} cadeia_ok={check.ok}")
     ledger.db.execute("UPDATE blocks SET payload = ? WHERE idx = 2", (b"\x00" * 24,))
-    ok, bad = ledger.verify_chain()
-    print(f"  apos adulterar bloco 2 no banco: cadeia_ok={ok}, primeiro invalido=bloco {bad}")
+    check = ledger.verify_chain(gw.keys)
+    print(f"  apos adulterar bloco 2 no banco: cadeia_ok={check.ok}, "
+          f"primeiro invalido=bloco {check.bad_idx} ({check.reason})")
+
+    print("\n== 6. Eventos registrados (fora da corrente) ==")
+    for e in reversed(ledger.events(20)):
+        print(f"  {e.kind:20s} no={e.node_id} {e.detail}")
 
     print("\n== Tamanho do pacote:", len(last_pkt), "bytes (limite LoRa: 255) ==")
 

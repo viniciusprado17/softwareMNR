@@ -18,6 +18,11 @@ Big-endian. Payload de 24 bytes + assinatura bruta r||s de 64 bytes = **88 bytes
 ## Notas para o firmware
 - A assinatura cobre exatamente os 24 bytes do payload, sem o campo sig.
 - mbedTLS: `mbedtls_ecdsa_sign` devolve r e s separados (`mbedtls_mpi`); escreva cada um em 32 bytes big-endian com `mbedtls_mpi_write_binary`. Nao use a funcao `_write_signature`, que produz DER.
-- Se usar micro-ecc: `uECC_sign` com `uECC_secp256r1()` ja devolve r||s (64 bytes).
+- **Implementacao escolhida (19/10):** micro-ecc, `uECC_sign_deterministic` com `uECC_secp256r1()`, que ja devolve r||s (64 bytes). Ver `firmware/lib/coldchain_core/src/cc_signer.cpp` e `docs/DECISOES.md`.
+- A micro-ecc usa a chave publica como X||Y (64 bytes, sem o prefixo 0x04).
 - A chave publica (65 bytes, 0x04||X||Y) pode ser exportada com `crypto.public_bytes_raw`.
 - Teste de aceite: um pacote gerado pelo firmware deve passar em `Gateway.receive` sem alteracao.
+
+## Protocolo serial receptor -> Raspberry Pi
+Uma linha por evento, 115200 8N1: `RX,<rssi>,<snr>,<hex minusculo>`, `INFO,<texto>`, `ERR,<codigo>,<texto>`.
+O no tambem imprime `TX,<seq>,<hex>` na sua propria serial (diagnostico, conferivel com `tools/check_fw_output.py`).

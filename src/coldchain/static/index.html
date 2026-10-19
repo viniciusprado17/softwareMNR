@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cadeia de Frio MNR 2026</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Cadeia de Frio Segura</h1>
+      <p class="sub">LoRa 915 MHz + ECDSA P-256 + ledger de hash · LACOR/UNIT · MNR 2026</p>
+    </div>
+    <div class="conn" id="conn"><span class="dot"></span><span id="conn-text">conectando...</span></div>
+  </header>
+
+  <main>
+    <section class="card node" id="node-card">
+      <h2>Nó <span id="node-id">-</span></h2>
+      <div class="big"><span id="temp">--.--</span> °C</div>
+      <div class="status-pill" id="status">SEM DADOS</div>
+      <dl>
+        <dt>Umidade</dt><dd id="hum">-</dd>
+        <dt>seq</dt><dd id="seq">-</dd>
+        <dt>RSSI / SNR</dt><dd id="radio">-</dd>
+        <dt>Último pacote</dt><dd id="age">-</dd>
+      </dl>
+      <div id="sim-box" hidden>
+        <button id="btn-heat" class="secondary">Simular aquecimento</button>
+        <p class="hint">Modo simulado: os pacotes não vêm do hardware.</p>
+      </div>
+    </section>
+
+    <section class="card chart-card">
+      <h2>Temperatura <small>(faixa segura <span id="range">2–8</span> °C sombreada)</small></h2>
+      <canvas id="chart" width="900" height="300"></canvas>
+    </section>
+
+    <section class="card chain">
+      <h2>Corrente de hash</h2>
+      <dl>
+        <dt>Blocos</dt><dd id="blocks">0</dd>
+        <dt>Cabeça</dt><dd><code id="head">-</code></dd>
+      </dl>
+      <button id="btn-verify">Verificar corrente</button>
+      <div class="verify" id="verify-result"></div>
+    </section>
+
+    <section class="card attack" id="attack" hidden>
+      <h2>Painel de ataque <small>(modo demonstração)</small></h2>
+      <div class="buttons">
+        <button data-demo="tamper" class="danger">Adulterar pacote</button>
+        <button data-demo="replay" class="danger">Reenviar pacote</button>
+        <button data-demo="corrupt-db" class="danger">Adulterar o banco</button>
+        <button data-demo="reset" class="secondary">Restaurar demo</button>
+      </div>
+      <div class="verify" id="attack-result"></div>
+    </section>
+
+    <section class="card events">
+      <h2>Eventos</h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Hora</th><th>Nó</th><th>Resultado</th><th>Detalhe</th></tr></thead>
+        <tbody id="events"></tbody>
+      </table></div>
+    </section>
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>

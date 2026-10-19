@@ -1,0 +1,65 @@
+# CI: testes Python (gateway), teste do nucleo do firmware no PC (vetores dourados) e
+# compilacao do firmware das placas Heltec V3 com PlatformIO.
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  python:
+    name: Python ${{ matrix.python }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: pip install -r requirements.txt httpx
+      - name: Testes unitarios
+        run: python -m unittest discover -s tests -v
+      - name: Demonstracao sem hardware
+        run: python run_demo.py
+      - name: Reproducao dos testes do artigo
+        run: python tools/repro_artigo.py
+      - name: Vetores do firmware atualizados
+        run: |
+          python tools/gen_firmware_vectors.py
+          git diff --exit-code firmware/test_vectors/vectors.h
+
+  firmware-host:
+    name: Firmware (nucleo no PC)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Vetores dourados C++ <-> Python
+        run: bash firmware/test_host/run.sh
+
+  firmware-build:
+    name: Firmware ${{ matrix.project }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [node, receiver, vectest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/cache@v4
+        with:
+          path: ~/.platformio
+          key: pio-${{ hashFiles('firmware/*/platformio.ini') }}
+      - run: pip install platformio
+      - name: "Compilar (sem keys.h: usa a chave modelo e nao transmite)"
+        run: pio run -d firmware/${{ matrix.project }}
