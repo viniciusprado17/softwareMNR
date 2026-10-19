@@ -8,7 +8,7 @@ Regra: tudo que a demonstração mostrar precisa estar no artigo **ou** declarad
 |---|---|---|
 | ESP32-WROOM-32 + SX1276 (TTGO), Tabela 1 "Planejado" | Heltec V3 (ESP32-S3 + SX1262). Firmware escrito, **não gravado ainda** | "Trocamos a placa por disponibilidade e custo" |
 | SHT31-D | Driver pronto (`firmware/node/src/sensor.cpp`), não testado | "Sensor real, medido" (só depois do T2/T3) |
-| ECDSA com SHA-256 | Curva **P-256** no firmware e no gateway | "A simulação usou secp256k1, o protótipo usa P-256, ambas de 256 bits" |
+| ECDSA com SHA-256 | Curva **P-256** no firmware e no gateway (decisão confirmada em 19/10) | **Evolução, não conflito:** "A validação computacional do artigo usou ECDSA secp256k1. No protótipo adotamos ECDSA P-256 (NIST), ambas de 256 bits, por ser o padrão de IoT e compatível com elementos seguros de hardware como o ATECC608, previsto para a versão de produção." |
 | micro-ecc | **micro-ecc** (`uECC_sign_deterministic`) + SHA-256 próprio | Coincide com o artigo. Nonce determinístico, sem depender do RNG |
 | Resultados 14/14, 50/50, 0,59 ms | Reproduzidos com `tools/repro_artigo.py`; latência no ESP32 a medir | "0,59 ms foi em PC. No ESP32 mediu-se X ms" |
 | Ciclo de 60 s | Configurável (`SAMPLE_INTERVAL_MS`); bancada em 10 s | Declarar o intervalo usado |

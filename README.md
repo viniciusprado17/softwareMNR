@@ -34,7 +34,7 @@ python run_demo.py                                   # demonstração no termina
 ./run_gateway.sh --simulate --demo-controls          # tela em http://127.0.0.1:8000
 ```
 
-No Windows, no lugar de `./run_gateway.sh`: `set PYTHONPATH=src` e `python -m coldchain.webapp --simulate --demo-controls`.
+**Windows:** instale o Python 3.12 (marcando "Add python.exe to PATH") e dê **duplo clique em `run_gateway.bat`**: ele instala tudo na primeira vez e abre o navegador. Guia completo, incluindo hardware, celular e por que não usar Vercel: **[`docs/COMO_RODAR.md`](docs/COMO_RODAR.md)**.
 
 Na tela (modo simulado):
 
