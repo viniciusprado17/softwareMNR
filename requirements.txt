@@ -1,0 +1,6 @@
+# Gateway (Raspberry Pi / PC). Python 3.10+ (3.10 precisa tambem de: tomli)
+cryptography>=41
+pyserial>=3.5
+fastapi>=0.110
+uvicorn>=0.29
+tomli>=2.0; python_version < "3.11"
