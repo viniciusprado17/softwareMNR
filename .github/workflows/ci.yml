@@ -61,5 +61,5 @@ jobs:
           path: ~/.platformio
           key: pio-${{ hashFiles('firmware/*/platformio.ini') }}
       - run: pip install platformio
-      - name: Compilar (sem keys.h: usa a chave modelo e nao transmite)
+      - name: "Compilar (sem keys.h: usa a chave modelo e nao transmite)"
         run: pio run -d firmware/${{ matrix.project }}
