@@ -73,6 +73,17 @@ class WebAppTests(unittest.TestCase):
         bad = self.client.post("/api/demo/corrupt-db").json()
         self.assertGreater(bad["from_temp"], 7.5)
 
+    def test_password_protects_everything_but_healthz(self):
+        from coldchain.webapp import create_app
+
+        cfg = Config(keys_file="/nao/existe.json")
+        app = create_app(cfg, build_gateway(cfg, ":memory:"), start_bridge=False, password="lacor")
+        c = TestClient(app)
+        self.assertEqual(c.get("/").status_code, 401)
+        self.assertEqual(c.get("/api/status", auth=("x", "errada")).status_code, 401)
+        self.assertEqual(c.get("/api/status", auth=("equipe", "lacor")).status_code, 200)
+        self.assertEqual(c.get("/healthz").status_code, 200)
+
     def test_demo_routes_absent_without_flag(self):
         from coldchain.webapp import create_app
 

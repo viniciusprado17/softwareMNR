@@ -36,6 +36,8 @@ python run_demo.py                                   # demonstração no termina
 
 **Windows:** instale o Python 3.12 (marcando "Add python.exe to PATH") e dê **duplo clique em `run_gateway.bat`**: ele instala tudo na primeira vez e abre o navegador. Guia completo, incluindo hardware, celular e por que não usar Vercel: **[`docs/COMO_RODAR.md`](docs/COMO_RODAR.md)**.
 
+**Link para a equipe:** o modo simulado pode ficar online com link fixo e senha (Render, plano gratuito). Passo a passo em **[`docs/LINK_EQUIPE.md`](docs/LINK_EQUIPE.md)**.
+
 Na tela (modo simulado):
 
 1. **Simular aquecimento** → a temperatura passa de 8 °C → ALARME.

@@ -10,15 +10,17 @@ Os botoes de ataque so existem com --demo-controls.
 from __future__ import annotations
 
 import argparse
+import base64
 import logging
 import os
+import secrets
 import struct
 import threading
 import time
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, HTTPException
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
@@ -91,6 +93,7 @@ def create_app(
     simulate: bool = False,
     demo_controls: bool = False,
     start_bridge: bool = True,
+    password: str | None = None,
 ) -> FastAPI:
     bridge = SerialBridge(gateway)
     stop = threading.Event()
@@ -123,6 +126,28 @@ def create_app(
     app.state.gateway = gateway
     app.state.bridge = bridge
     app.state.sim = sim
+
+    if password:
+        # Senha simples (HTTP Basic, qualquer usuario) para o link publico da equipe.
+        @app.middleware("http")
+        async def require_password(request: Request, call_next):
+            if request.url.path == "/healthz":
+                return await call_next(request)
+            given = ""
+            auth = request.headers.get("authorization", "")
+            if auth.lower().startswith("basic "):
+                try:
+                    given = base64.b64decode(auth[6:]).decode("utf-8").partition(":")[2]
+                except (ValueError, UnicodeDecodeError):
+                    given = ""
+            if not secrets.compare_digest(given.encode(), password.encode()):
+                return Response("Senha necessaria", status_code=401,
+                                headers={"WWW-Authenticate": 'Basic realm="Cadeia de Frio MNR 2026"'})
+            return await call_next(request)
+
+    @app.get("/healthz", include_in_schema=False)
+    def healthz():
+        return {"ok": True}
 
     @app.get("/", include_in_schema=False)
     def index():
@@ -247,17 +272,22 @@ def main(argv: list[str] | None = None) -> None:
     p.add_argument("--demo-controls", action="store_true", help="habilita os botoes de ataque")
     p.add_argument("--host")
     p.add_argument("--web-port", type=int)
+    p.add_argument("--password", default=os.environ.get("CC_PASSWORD") or None,
+                   help="exige senha na tela (padrao: variavel CC_PASSWORD)")
     args = p.parse_args(argv)
     cfg = apply_common_args(args)
     if args.host:
         cfg.web.host = args.host
     if args.web_port:
         cfg.web.port = args.web_port
+    elif os.environ.get("PORT"):  # hospedagem (Render, Railway...) define a porta
+        cfg.web.port = int(os.environ["PORT"])
     setup_logging(cfg, args.verbose)
     gw = build_gateway(cfg, args.db)
     if args.reset_node is not None:
         gw.reset_node(args.reset_node)
-    app = create_app(cfg, gw, simulate=args.simulate, demo_controls=args.demo_controls)
+    app = create_app(cfg, gw, simulate=args.simulate, demo_controls=args.demo_controls,
+                     password=args.password)
 
     import uvicorn
 
