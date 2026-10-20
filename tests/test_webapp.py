@@ -42,6 +42,7 @@ class WebAppTests(unittest.TestCase):
         s = c.get("/api/status").json()
         self.assertEqual(s["chain"]["blocks"], 5)
         self.assertTrue(s["demo_controls"])
+        self.assertEqual(s["event_counts"], {"aceito": 5})
         self.assertEqual(len(c.get("/api/readings?limit=3").json()), 3)
         # B: aceito
         self.assertEqual(c.get("/api/events").json()[0]["kind"], "aceito")

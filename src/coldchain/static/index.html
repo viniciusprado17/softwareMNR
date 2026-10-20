@@ -1,71 +1,179 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Cadeia de Frio MNR 2026</title>
+  <title>Cadeia de Frio Segura · MNR 2026</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232563eb'/%3E%3Cpath d='M18 7v11.5a4.5 4.5 0 1 1-5 0V7a2.5 2.5 0 0 1 5 0Z' fill='none' stroke='white' stroke-width='2.4'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-  <header>
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+<!-- Icones Lucide (ISC), ver vendor/LICENSES.md -->
+<symbol id="i-thermometer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-thermometer" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" /></symbol>
+<symbol id="i-thermometer-snowflake" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-thermometer-snowflake" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m10 20-1.25-2.5L6 18" /> <path d="M10 4 8.75 6.5 6 6" /> <path d="M10.585 15H10" /> <path d="M2 12h6.5L10 9" /> <path d="M20 14.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0z" /> <path d="m4 10 1.5 2L4 14" /> <path d="m7 21 3-6-1.5-3" /> <path d="m7 3 3 6h2" /></symbol>
+<symbol id="i-droplets" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-droplets" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z" /> <path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97" /></symbol>
+<symbol id="i-radio-tower" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-radio-tower" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M4.9 16.1C1 12.2 1 5.8 4.9 1.9" /> <path d="M7.8 4.7a6.14 6.14 0 0 0-.8 7.5" /> <circle cx="12" cy="9" r="2" /> <path d="M16.2 4.8c2 2 2.26 5.11.8 7.47" /> <path d="M19.1 1.9a9.96 9.96 0 0 1 0 14.1" /> <path d="M9.5 18h5" /> <path d="m8 22 4-11 4 11" /></symbol>
+<symbol id="i-signal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-signal" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M2 20h.01" /> <path d="M7 20v-4" /> <path d="M12 20v-8" /> <path d="M17 20V8" /> <path d="M22 4v16" /></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-clock" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="12" r="10" /> <path d="M12 6v6l4 2" /></symbol>
+<symbol id="i-shield-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-shield-check" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> <path d="m9 12 2 2 4-4" /></symbol>
+<symbol id="i-shield-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-shield-alert" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> <path d="M12 8v4" /> <path d="M12 16h.01" /></symbol>
+<symbol id="i-shield-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-shield-x" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> <path d="m14.5 9.5-5 5" /> <path d="m9.5 9.5 5 5" /></symbol>
+<symbol id="i-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-link" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /> <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></symbol>
+<symbol id="i-unlink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-unlink" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m18.84 12.25 1.72-1.71h-.02a5.004 5.004 0 0 0-.12-7.07 5.006 5.006 0 0 0-6.95 0l-1.72 1.71" /> <path d="m5.17 11.75-1.71 1.71a5.004 5.004 0 0 0 .12 7.07 5.006 5.006 0 0 0 6.95 0l1.71-1.71" /> <line x1="8" x2="8" y1="2" y2="5" /> <line x1="2" x2="5" y1="8" y2="8" /> <line x1="16" x2="16" y1="19" y2="22" /> <line x1="19" x2="22" y1="16" y2="16" /></symbol>
+<symbol id="i-flame" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-flame" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4" /></symbol>
+<symbol id="i-repeat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-repeat" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m17 2 4 4-4 4" /> <path d="M3 11v-1a4 4 0 0 1 4-4h14" /> <path d="m7 22-4-4 4-4" /> <path d="M21 13v1a4 4 0 0 1-4 4H3" /></symbol>
+<symbol id="i-database" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-database" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <ellipse cx="12" cy="5" rx="9" ry="3" /> <path d="M3 5V19A9 3 0 0 0 21 19V5" /> <path d="M3 12A9 3 0 0 0 21 12" /></symbol>
+<symbol id="i-rotate-ccw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-rotate-ccw" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /> <path d="M3 3v5h5" /></symbol>
+<symbol id="i-activity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-activity" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" /></symbol>
+<symbol id="i-cpu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-cpu" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12 20v2" /> <path d="M12 2v2" /> <path d="M17 20v2" /> <path d="M17 2v2" /> <path d="M2 12h2" /> <path d="M2 17h2" /> <path d="M2 7h2" /> <path d="M20 12h2" /> <path d="M20 17h2" /> <path d="M20 7h2" /> <path d="M7 20v2" /> <path d="M7 2v2" /> <rect x="4" y="4" width="16" height="16" rx="2" /> <rect x="8" y="8" width="8" height="8" rx="1" /></symbol>
+<symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-download" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12 15V3" /> <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <path d="m7 10 5 5 5-5" /></symbol>
+<symbol id="i-circle-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-circle-check" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></symbol>
+<symbol id="i-triangle-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-triangle-alert" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" /> <path d="M12 9v4" /> <path d="M12 17h.01" /></symbol>
+<symbol id="i-circle-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-circle-x" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="12" r="10" /> <path d="m15 9-6 6" /> <path d="m9 9 6 6" /></symbol>
+<symbol id="i-snowflake" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-snowflake" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m10 20-1.25-2.5L6 18" /> <path d="M10 4 8.75 6.5 6 6" /> <path d="m14 20 1.25-2.5L18 18" /> <path d="m14 4 1.25 2.5L18 6" /> <path d="m17 21-3-6h-4" /> <path d="m17 3-3 6 1.5 3" /> <path d="M2 12h6.5L10 9" /> <path d="m20 10-1.5 2 1.5 2" /> <path d="M22 12h-6.5L14 15" /> <path d="m4 10 1.5 2L4 14" /> <path d="m7 21 3-6-1.5-3" /> <path d="m7 3 3 6h4" /></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="12" r="4" /> <path d="M12 2v2" /> <path d="M12 20v2" /> <path d="m4.93 4.93 1.41 1.41" /> <path d="m17.66 17.66 1.41 1.41" /> <path d="M2 12h2" /> <path d="M20 12h2" /> <path d="m6.34 17.66-1.41 1.41" /> <path d="m19.07 4.93-1.41 1.41" /></symbol>
+<symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401" /></symbol>
+<symbol id="i-boxes" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-boxes" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42Z" /> <path d="m7 16.5-4.74-2.85" /> <path d="m7 16.5 5-3" /> <path d="M7 16.5v5.17" /> <path d="M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3Z" /> <path d="m17 16.5-5-3" /> <path d="m17 16.5 4.74-2.85" /> <path d="M17 16.5v5.17" /> <path d="M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0l-3 1.8Z" /> <path d="M12 8 7.26 5.15" /> <path d="m12 8 4.74-2.85" /> <path d="M12 13.5V8" /></symbol>
+<symbol id="i-hash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-hash" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <line x1="4" x2="20" y1="9" y2="9" /> <line x1="4" x2="20" y1="15" y2="15" /> <line x1="10" x2="8" y1="3" y2="21" /> <line x1="16" x2="14" y1="3" y2="21" /></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-lock" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="18" height="11" x="3" y="11" rx="2" ry="2" /> <path d="M7 11V7a5 5 0 0 1 10 0v4" /></symbol>
+<symbol id="i-fingerprint" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-fingerprint" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4" /> <path d="M14 13.12c0 2.38 0 6.38-1 8.88" /> <path d="M17.29 21.02c.12-.6.43-2.3.5-3.02" /> <path d="M2 12a10 10 0 0 1 18-6" /> <path d="M2 16h.01" /> <path d="M21.8 16c.2-2 .131-5.354 0-6" /> <path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2" /> <path d="M8.65 22c.21-.66.45-1.32.57-2" /> <path d="M9 6.8a6 6 0 0 1 9 5.2v2" /></symbol>
+<symbol id="i-satellite-dish" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-satellite-dish" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M18 12a6 6 0 00-6-6" /> <path d="M2.824 10.459a8 8 0 0010.717 10.717c.558-.276.623-1.012.183-1.452l-9.448-9.448c-.44-.44-1.176-.375-1.452.183" /> <path d="M22 12A10 10 0 0012 2" /> <path d="m9 15 4-4" /></symbol>
+</svg>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="logo"><svg><use href="#i-thermometer-snowflake"/></svg></div>
     <div>
       <h1>Cadeia de Frio Segura</h1>
-      <p class="sub">LoRa 915 MHz + ECDSA P-256 + ledger de hash · LACOR/UNIT · MNR 2026</p>
+      <p>LoRa 915 MHz · ECDSA P-256 · registro encadeado por hash · LACOR/UNIT · MNR 2026</p>
     </div>
-    <div class="conn" id="conn"><span class="dot"></span><span id="conn-text">conectando...</span></div>
-  </header>
+  </div>
+  <div class="top-actions">
+    <span class="chip mode" id="mode-chip"><svg><use href="#i-cpu"/></svg><span id="mode-text">—</span></span>
+    <span class="chip conn" id="conn"><span class="pulse"></span><span id="conn-text">conectando…</span></span>
+    <span class="chip clock"><svg><use href="#i-clock"/></svg><span id="clock">--:--:--</span></span>
+    <button class="icon-btn" id="theme-btn" title="Alternar tema claro/escuro" aria-label="Alternar tema">
+      <svg class="when-dark"><use href="#i-sun"/></svg><svg class="when-light"><use href="#i-moon"/></svg>
+    </button>
+  </div>
+</header>
 
-  <main>
-    <section class="card node" id="node-card">
-      <h2>Nó <span id="node-id">-</span></h2>
-      <div class="big"><span id="temp">--.--</span> °C</div>
-      <div class="status-pill" id="status">SEM DADOS</div>
-      <dl>
-        <dt>Umidade</dt><dd id="hum">-</dd>
-        <dt>seq</dt><dd id="seq">-</dd>
-        <dt>RSSI / SNR</dt><dd id="radio">-</dd>
-        <dt>Último pacote</dt><dd id="age">-</dd>
-      </dl>
-      <div id="sim-box" hidden>
-        <button id="btn-heat" class="secondary">Simular aquecimento</button>
-        <p class="hint">Modo simulado: os pacotes não vêm do hardware.</p>
+<div class="sim-banner" id="sim-banner" hidden>
+  <svg><use href="#i-cpu"/></svg>
+  <span><b>Modo simulado:</b> um nó virtual gera e assina as leituras. Gateway, corrente de hash e verificações são os reais.</span>
+  <button class="btn ghost sm" id="btn-heat"><svg><use href="#i-flame"/></svg><span>Simular aquecimento</span></button>
+</div>
+
+<main class="layout">
+  <!-- KPIs -->
+  <section class="kpis">
+    <article class="kpi kpi-temp" id="kpi-temp">
+      <div class="kpi-head"><svg><use href="#i-thermometer"/></svg>Temperatura · Nó <span id="node-id">–</span></div>
+      <div class="kpi-value"><span id="temp">--.--</span><small>°C</small></div>
+      <div class="status" id="status"><svg><use href="#i-activity"/></svg><span>SEM DADOS</span></div>
+    </article>
+    <article class="kpi">
+      <div class="kpi-head"><svg><use href="#i-droplets"/></svg>Umidade</div>
+      <div class="kpi-value"><span id="hum">--</span><small>%</small></div>
+      <div class="kpi-foot">faixa segura <b id="range">2–8 °C</b></div>
+    </article>
+    <article class="kpi">
+      <div class="kpi-head"><svg><use href="#i-shield-check"/></svg>Pacotes aceitos</div>
+      <div class="kpi-value ok-text"><span id="accepted">0</span></div>
+      <div class="kpi-foot">assinatura válida e seq novo</div>
+    </article>
+    <article class="kpi">
+      <div class="kpi-head"><svg><use href="#i-shield-alert"/></svg>Ataques bloqueados</div>
+      <div class="kpi-value bad-text"><span id="blocked">0</span></div>
+      <div class="kpi-foot" id="blocked-detail">nenhum até agora</div>
+    </article>
+    <article class="kpi">
+      <div class="kpi-head"><svg><use href="#i-boxes"/></svg>Blocos na corrente</div>
+      <div class="kpi-value"><span id="blocks">0</span></div>
+      <div class="kpi-foot mono">cabeça <span id="head">—</span></div>
+    </article>
+    <article class="kpi">
+      <div class="kpi-head"><svg><use href="#i-radio-tower"/></svg>Enlace LoRa</div>
+      <div class="kpi-value sm"><span id="rssi">--</span><small>dBm</small><span class="sep">/</span><span id="snr">--</span><small>dB</small></div>
+      <div class="kpi-foot">último pacote <b id="age">–</b> · seq <b id="seq">–</b></div>
+    </article>
+  </section>
+
+  <!-- Grafico -->
+  <section class="card chart-card">
+    <div class="card-head">
+      <h2><svg><use href="#i-activity"/></svg>Temperatura ao longo do tempo</h2>
+      <div class="legend">
+        <span><i class="dot ok"></i>OK</span><span><i class="dot warn"></i>ALERTA</span><span><i class="dot bad"></i>ALARME</span><span><i class="band"></i>faixa segura</span>
       </div>
-    </section>
+    </div>
+    <div class="chart-wrap"><canvas id="chart"></canvas></div>
+  </section>
 
-    <section class="card chart-card">
-      <h2>Temperatura <small>(faixa segura <span id="range">2–8</span> °C sombreada)</small></h2>
-      <canvas id="chart" width="900" height="300"></canvas>
-    </section>
+  <!-- Corrente -->
+  <section class="card chain-card">
+    <div class="card-head">
+      <h2><svg><use href="#i-link"/></svg>Corrente de hash</h2>
+      <button class="btn primary" id="btn-verify"><svg><use href="#i-fingerprint"/></svg><span>Verificar corrente</span></button>
+    </div>
+    <p class="hint">Cada bloco guarda o hash do anterior. Os últimos blocos gravados:</p>
+    <div class="chain" id="chain"><div class="empty">aguardando o primeiro pacote…</div></div>
+    <div class="result" id="verify-result" hidden></div>
+  </section>
 
-    <section class="card chain">
-      <h2>Corrente de hash</h2>
-      <dl>
-        <dt>Blocos</dt><dd id="blocks">0</dd>
-        <dt>Cabeça</dt><dd><code id="head">-</code></dd>
-      </dl>
-      <button id="btn-verify">Verificar corrente</button>
-      <div class="verify" id="verify-result"></div>
-    </section>
+  <!-- Ataques -->
+  <section class="card attack-card" id="attack" hidden>
+    <div class="card-head">
+      <h2><svg><use href="#i-shield-x"/></svg>Painel de ataque <small>modo demonstração</small></h2>
+      <button class="btn ghost" data-demo="reset"><svg><use href="#i-rotate-ccw"/></svg><span>Restaurar demo</span></button>
+    </div>
+    <div class="attacks">
+      <button class="attack" data-demo="tamper">
+        <span class="a-icon"><svg><use href="#i-thermometer"/></svg></span>
+        <span class="a-body"><b>Adulterar pacote</b><span>Troca a temperatura do último pacote para 5,00 °C e mantém a assinatura original.</span></span>
+        <span class="a-expect">esperado: ASSINATURA INVÁLIDA</span>
+      </button>
+      <button class="attack" data-demo="replay">
+        <span class="a-icon"><svg><use href="#i-repeat"/></svg></span>
+        <span class="a-body"><b>Reenviar pacote</b><span>Manda de novo um pacote legítimo já aceito, com assinatura válida.</span></span>
+        <span class="a-expect">esperado: REPLAY</span>
+      </button>
+      <button class="attack" data-demo="corrupt-db">
+        <span class="a-icon"><svg><use href="#i-database"/></svg></span>
+        <span class="a-body"><b>Adulterar o banco</b><span>Edita um alarme antigo direto no SQLite. Depois, clique em "Verificar corrente".</span></span>
+        <span class="a-expect">esperado: CORRENTE QUEBRADA</span>
+      </button>
+    </div>
+    <div class="result" id="attack-result" hidden></div>
+  </section>
 
-    <section class="card attack" id="attack" hidden>
-      <h2>Painel de ataque <small>(modo demonstração)</small></h2>
-      <div class="buttons">
-        <button data-demo="tamper" class="danger">Adulterar pacote</button>
-        <button data-demo="replay" class="danger">Reenviar pacote</button>
-        <button data-demo="corrupt-db" class="danger">Adulterar o banco</button>
-        <button data-demo="reset" class="secondary">Restaurar demo</button>
+  <!-- Eventos -->
+  <section class="card events-card">
+    <div class="card-head">
+      <h2><svg><use href="#i-hash"/></svg>Registro de eventos</h2>
+      <div class="head-tools">
+        <div class="tabs" role="tablist">
+          <button class="tab active" data-filter="all">Todos</button>
+          <button class="tab" data-filter="ok">Aceitos</button>
+          <button class="tab" data-filter="bad">Rejeições</button>
+        </div>
+        <button class="btn ghost sm" id="btn-csv" title="Baixar as leituras aceitas em CSV (auditoria)"><svg><use href="#i-download"/></svg><span>CSV</span></button>
       </div>
-      <div class="verify" id="attack-result"></div>
-    </section>
-
-    <section class="card events">
-      <h2>Eventos</h2>
-      <div class="table-wrap"><table>
+    </div>
+    <div class="table-wrap">
+      <table>
         <thead><tr><th>Hora</th><th>Nó</th><th>Resultado</th><th>Detalhe</th></tr></thead>
         <tbody id="events"></tbody>
-      </table></div>
-    </section>
-  </main>
-  <script src="/static/app.js"></script>
+      </table>
+    </div>
+  </section>
+</main>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script src="/static/vendor/chart.umd.min.js"></script>
+<script src="/static/vendor/chartjs-plugin-annotation.min.js"></script>
+<script src="/static/app.js"></script>
 </body>
 </html>

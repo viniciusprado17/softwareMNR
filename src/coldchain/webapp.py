@@ -160,6 +160,7 @@ def create_app(
             "demo_controls": demo_controls,
             "nodes": nodes,
             "chain": {"blocks": gateway.ledger.count(), "head": head},
+            "event_counts": gateway.ledger.event_counts(),
             "thresholds": gateway.th.__dict__,
             "expected_interval_s": gateway.expected_interval_s,
         }
