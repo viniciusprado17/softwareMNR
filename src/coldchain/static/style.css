@@ -103,6 +103,10 @@ h1, h2 { margin: 0; letter-spacing: -.01em; }
 }
 .icon-btn:hover { color: var(--text); }
 [data-theme="dark"] .when-light, [data-theme="light"] .when-dark { display: none; }
+.when-full, .is-full .when-normal { display: none; }
+.is-full .when-full { display: block; }
+.brand p b { color: var(--sim); font-weight: 600; }
+#btn-heat.heating { background: var(--bad-bg); color: var(--bad); border-color: color-mix(in srgb, var(--bad) 40%, transparent); }
 
 .sim-banner {
   display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
@@ -293,8 +297,65 @@ td.d { color: var(--muted); font-family: ui-monospace, Consolas, "DejaVu Sans Mo
 .toast.out { opacity: 0; transform: translateY(8px); transition: .3s; }
 @keyframes slide { from { opacity: 0; transform: translateY(12px); } }
 
+/* ---------- modo apresentacao: tudo cabe na janela, sem rolar a pagina ---------- */
+@media (min-width: 1000px) and (min-height: 560px) {
+  html, body { height: 100%; overflow: hidden; }
+  body { display: flex; flex-direction: column; }
+  .topbar { position: static; padding: 10px 22px; flex: none; flex-wrap: nowrap; }
+  .brand { flex: 1; min-width: 0; }
+  .brand > div:last-child { min-width: 0; }
+  .brand h1, .brand p { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .top-actions { flex-wrap: nowrap; flex: none; }
+  .logo { width: 38px; height: 38px; }
+  .brand h1 { font-size: 18px; }
+  .layout {
+    flex: 1; min-height: 0; padding: 12px 22px 14px; gap: 12px;
+    grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1.35fr) minmax(0, 1fr);
+  }
+  .kpis { grid-column: 1 / -1; grid-template-columns: 1.25fr repeat(5, minmax(0, 1fr)); gap: 12px; }
+  .kpi { padding: 10px 14px; gap: 3px; }
+  .kpi-value { font-size: clamp(20px, 2vw, 30px); }
+  .kpi-temp .kpi-value { font-size: clamp(26px, 2.6vw, 40px); }
+  .kpi-value.sm { font-size: clamp(17px, 1.6vw, 24px); }
+  .kpi-temp { display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto auto; align-items: center; column-gap: 8px; }
+  .kpi-temp .kpi-head { grid-column: 1 / -1; }
+  .kpi-temp .status { align-self: center; }
+  .card { padding: 12px 16px; display: flex; flex-direction: column; min-height: 0; }
+  .card-head { margin-bottom: 8px; flex: none; }
+  .chart-card { grid-column: 1; grid-row: 2; }
+  .chain-card { grid-column: 2; grid-row: 2; }
+  .attack-card { grid-column: 1; grid-row: 3; }
+  .events-card { grid-column: 2; grid-row: 3; }
+  .layout:has(.attack-card[hidden]) .events-card { grid-column: 1 / -1; }
+  .chart-wrap { flex: 1; min-height: 0; height: auto; }
+  .hint { display: none; }
+  .chain { flex: 1; min-height: 0; max-height: none; flex-direction: column; overflow: auto; }
+  .block { padding: 6px 10px; min-width: 0; flex: none; }
+  .block + .block { margin-top: 10px; margin-left: 0; }
+  .block + .block::before { left: 22px; top: -11px; width: 2px; height: 10px; }
+  .result { margin-top: 8px; padding: 8px 12px; font-size: 13px; flex: none; }
+  .attacks { flex: 1; min-height: 0; gap: 10px; overflow: auto; align-content: start; }
+  .attack { padding: 10px 12px; align-content: start; }
+  .a-icon { width: 34px; height: 34px; grid-row: span 3; }
+  .a-body span { font-size: 12px; line-height: 1.35; }
+  .events-card .card-head h2 { font-size: 14px; }
+  .table-wrap { flex: 1; min-height: 0; max-height: none; }
+  tbody td { padding: 6px 10px; }
+  thead th { padding: 7px 10px; }
+  td.d { display: none; }
+  .tab { padding: 4px 9px; }
+}
+@media (min-width: 1000px) and (min-height: 560px) and (max-height: 760px) {
+  .kpi-foot, .a-body span { display: none; }
+  .a-icon { grid-row: span 2; }
+  .brand p { font-size: 11.5px; }
+}
+@media (min-width: 1750px) and (min-height: 560px) { td.d { display: table-cell; white-space: nowrap; } }
+@media (min-width: 1000px) and (max-width: 1399px) and (min-height: 560px) { .chip.clock { display: none; } }
+
 /* ---------- responsivo ---------- */
-@media (max-width: 1280px) {
+@media (max-width: 999px), (max-width: 1280px) and (max-height: 559px) {
   .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .chart-card, .chain-card { grid-column: 1 / -1; }
   .chain { max-height: none; flex-direction: row; overflow-x: auto; }
