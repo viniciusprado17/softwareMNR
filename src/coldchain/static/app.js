@@ -72,7 +72,10 @@ function renderStatus(s) {
   const mode = $("mode-chip");
   mode.className = `chip mode ${s.simulate ? "sim" : "real"}`;
   $("mode-text").textContent = s.simulate ? "modo simulado" : `hardware · ${s.serial.source || "serial"}`;
-  $("sim-banner").hidden = !s.simulate;
+  $("btn-heat").hidden = !s.simulate;
+  $("subtitle").innerHTML = s.simulate
+    ? "<b>Modo simulado:</b> um nó virtual gera e assina as leituras · gateway, corrente de hash e verificações são os reais"
+    : "LoRa 915 MHz · ECDSA P-256 · registro encadeado por hash · LACOR/UNIT · MNR 2026";
   $("attack").hidden = !s.demo_controls;
 
   state.thresholds = s.thresholds;
@@ -149,7 +152,7 @@ function drawChart(readings) {
 
   if (!state.chart) {
     const ctx = $("chart").getContext("2d");
-    const grad = ctx.createLinearGradient(0, 0, 0, 330);
+    const grad = ctx.createLinearGradient(0, 0, 0, ctx.canvas.clientHeight || 330);
     grad.addColorStop(0, "rgba(59,130,246,.28)");
     grad.addColorStop(1, "rgba(59,130,246,0)");
     state.chart = new Chart(ctx, {
@@ -311,6 +314,11 @@ async function downloadCsv() {
 // ---------------------------------------------------------------- eventos de interface
 loadTheme();
 $("theme-btn").addEventListener("click", toggleTheme);
+$("fs-btn").addEventListener("click", () => {
+  if (document.fullscreenElement) document.exitFullscreen();
+  else document.documentElement.requestFullscreen().catch(() => toast(false, "Tela cheia indisponível: use F11"));
+});
+document.addEventListener("fullscreenchange", () => document.documentElement.classList.toggle("is-full", !!document.fullscreenElement));
 $("btn-verify").addEventListener("click", verifyChain);
 $("btn-csv").addEventListener("click", () => downloadCsv().catch((e) => toast(false, e.message)));
 document.querySelectorAll("[data-demo]").forEach((b) => b.addEventListener("click", () => demo(b.dataset.demo, b)));
