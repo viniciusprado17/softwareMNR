@@ -270,6 +270,12 @@ class Ledger:
             ).fetchall()
         return [Event(*r) for r in rows]
 
+    def event_counts(self) -> dict[str, int]:
+        """Quantidade de eventos por tipo (aceito, assinatura_invalida, replay...)."""
+        with self.lock:
+            rows = self.db.execute("SELECT kind, COUNT(*) FROM events GROUP BY kind").fetchall()
+        return dict(rows)
+
     def reset(self) -> None:
         """Apaga tudo (botao "Restaurar demo")."""
         with self.lock:

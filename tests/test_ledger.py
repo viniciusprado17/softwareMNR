@@ -74,6 +74,12 @@ class LedgerExtendedTests(unittest.TestCase):
     def test_blocks_limit_returns_latest(self):
         self.assertEqual([b.seq for b in self.ledger.blocks(limit=2)], [3, 4])
 
+    def test_event_counts(self):
+        self.gw.receive(b"x")
+        counts = self.ledger.event_counts()
+        self.assertEqual(counts["aceito"], 4)
+        self.assertEqual(counts["tamanho_invalido"], 1)
+
     def test_reset(self):
         self.ledger.reset()
         self.assertEqual(self.ledger.count(), 0)

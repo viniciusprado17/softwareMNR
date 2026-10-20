@@ -51,9 +51,13 @@ Descubra o IP do PC com `ipconfig` (Windows) ou `hostname -I` (Linux) e abra `ht
 
 No modo simulado a tela mostra "Modo simulado: os pacotes não vêm do hardware". Diga isso à banca se usar esse modo (Plano B).
 
-## Por que não hospedar na Vercel (ou outra nuvem)?
+## Link para a equipe pela internet
 
-- A Vercel roda funções que **desligam entre uma requisição e outra**. O gateway precisa ficar ligado o tempo todo lendo a porta USB e guardando a corrente no SQLite, e isso não funciona lá.
+O **modo simulado** pode ser publicado com link fixo e senha no Render: ver [`LINK_EQUIPE.md`](LINK_EQUIPE.md). O modo com as placas continua local.
+
+## Por que não na Vercel, e por que o hardware fica local?
+
+- A Vercel roda funções que **desligam entre uma requisição e outra** (o Render mantém um servidor ligado, por isso serve para o modo simulado). O gateway precisa ficar ligado o tempo todo lendo a porta USB e guardando a corrente no SQLite, e isso não funciona lá.
 - O receptor LoRa está **fisicamente no USB** do seu PC ou do Pi. Um servidor na nuvem não enxerga essa porta.
 - A demonstração deve funcionar **sem internet** (Seção 17, risco "Wi-Fi ruim no local").
 

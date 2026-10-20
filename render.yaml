@@ -1,0 +1,17 @@
+# Render (render.com): publica a tela em MODO SIMULADO com link fixo para a equipe.
+# Painel do Render > New > Blueprint > escolher este repositorio. Ver docs/LINK_EQUIPE.md.
+services:
+  - type: web
+    name: cadeia-de-frio-mnr
+    runtime: python
+    plan: free
+    branch: main
+    autoDeploy: true
+    buildCommand: pip install -r requirements.txt
+    startCommand: "PYTHONPATH=src python -m coldchain.webapp --simulate --demo-controls --host 0.0.0.0 --db :memory:"
+    healthCheckPath: /healthz
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: CC_PASSWORD   # senha da tela; o Render pede o valor na criacao (nao fica no git)
+        sync: false
