@@ -61,6 +61,9 @@ A Tabela 3 do artigo (evolucoes propostas) e o roteiro: SHT31 real, latencia rea
 - Guia do Bloco B: `docs/GUIA_HARDWARE.md`. Medicoes: `docs/MEDICOES.md`. Diferencas: `docs/ARTIGO_X_DEMONSTRACAO.md`. Decisoes: `docs/DECISOES.md`.
 - Tela sem hardware: `./run_gateway.sh --simulate --demo-controls` (http://127.0.0.1:8000).
 
+## Maximizacao com o Fable (gatilho do usuario)
+Quando o usuario disser **COMECAR MAXIMIZACAO** (com ou sem acento, qualquer caixa): rodar `bash tools/fable_preflight.sh`, e se estiver OK delegar a tarefa inteira de `docs/FABLE_TAREFA.md` a um agente `model: "fable"` (um so, na branch atual, sem worktree), seguindo o "Procedimento do Claude principal" do proprio arquivo (disparo e revisao). Sem a frase, **nao** disparar o Fable: ele consome muito. O firmware nao compila na maquina da sessao (registro do PlatformIO bloqueado): a prova e o CI.
+
 ## Convencoes
 - Python 3.10+. Dependencias: `cryptography`, `pyserial`, `fastapi`, `uvicorn` (`requirements.txt`; 3.10 tambem `tomli`). Sem frameworks pesados.
 - O formato do pacote e a fonte da verdade em `packet.py`; o firmware deve espelhar byte a byte (big-endian).
