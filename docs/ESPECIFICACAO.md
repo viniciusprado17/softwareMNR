@@ -726,11 +726,14 @@ Os botões de ataque ficam atrás de uma bandeira `--demo-controls` e **não exi
 | `GET /api/readings?limit=100` | Últimas leituras aceitas (JSON) |
 | `GET /api/events?limit=100` | Últimos eventos, incluindo rejeições |
 | `GET /api/chain/verify` | `{ok, bloco_invalido, motivo}` |
+| `GET /api/access` | `{host, port, lan_open, urls, password_required}`: enderecos para abrir a tela em outro aparelho (QR code). `urls` fica vazio se o servidor escuta so em `127.0.0.1` |
 | `POST /api/demo/tamper` | Injeta pacote adulterado e devolve o resultado |
 | `POST /api/demo/replay` | Reenvia o último pacote aceito |
 | `POST /api/demo/corrupt-db` | Altera um bloco no banco |
 | `POST /api/demo/reset` | Reinicia o estado da demonstração |
 | `GET /ws` (WebSocket, opcional) | Empurra novos eventos para a página |
+
+Fora da API, o servidor também serve `/manifest.webmanifest` e `/sw.js` (app instalável no celular). O service worker só guarda a casca da tela, nunca respostas de `/api/*`.
 
 Se o WebSocket complicar, a página pode consultar `GET /api/readings` e `GET /api/events` a cada 1 s. **Prefira o simples**.
 

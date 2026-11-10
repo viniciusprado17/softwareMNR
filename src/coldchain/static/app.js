@@ -74,6 +74,7 @@ function renderStatus(s) {
   mode.className = `chip mode ${s.simulate ? "sim" : "real"}`;
   $("mode-text").textContent = s.simulate ? "modo simulado" : `hardware · ${s.serial.source || "serial"}`;
   $("btn-heat").hidden = !s.simulate;
+  $("pipe").classList.toggle("simulated", !!s.simulate);
   $("subtitle").innerHTML = s.simulate
     ? "<b>Modo simulado:</b> um nó virtual gera e assina as leituras · gateway, corrente de hash e verificações são os reais"
     : "LoRa 915 MHz · ECDSA P-256 · registro encadeado por hash · LACOR/UNIT · MNR 2026";
@@ -113,13 +114,47 @@ function renderStatus(s) {
   return node;
 }
 
+// Medidor circular de 270 graus: de (faixa baixa - 4) a (faixa alta + 6), com a faixa segura destacada.
+const GAUGE = { cx: 60, cy: 60, r: 48, a0: 135, sweep: 270 };
+function gaugePoint(deg) {
+  const t = (deg * Math.PI) / 180;
+  return [GAUGE.cx + GAUGE.r * Math.cos(t), GAUGE.cy + GAUGE.r * Math.sin(t)];
+}
+function gaugeArc(d0, d1) {
+  const [x0, y0] = gaugePoint(d0), [x1, y1] = gaugePoint(d1);
+  return `M${x0.toFixed(2)} ${y0.toFixed(2)}A${GAUGE.r} ${GAUGE.r} 0 ${d1 - d0 > 180 ? 1 : 0} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`;
+}
+function renderGauge(temp) {
+  const { low, high } = state.thresholds;
+  const min = low - 4, max = high + 6;
+  const deg = (v) => GAUGE.a0 + GAUGE.sweep * Math.min(1, Math.max(0, (v - min) / (max - min)));
+  $("g-track").setAttribute("d", gaugeArc(GAUGE.a0, GAUGE.a0 + GAUGE.sweep));
+  $("g-safe").setAttribute("d", gaugeArc(deg(low), deg(high)));
+  if (temp == null) { $("g-val").setAttribute("d", ""); return; }
+  const end = deg(temp);
+  $("g-val").setAttribute("d", end - GAUGE.a0 < 1 ? "" : gaugeArc(GAUGE.a0, end));
+  const [x, y] = gaugePoint(end);
+  $("g-dot").setAttribute("cx", x.toFixed(2));
+  $("g-dot").setAttribute("cy", y.toFixed(2));
+}
+
+function setAlarmLook(last, node) {
+  const alarm = !!last && last.status === 2 && !(node && node.silent);
+  document.body.classList.toggle("alarm", alarm);
+  document.title = alarm ? `ALARME ${fmtNum(last.temp_c)} °C · Cadeia de Frio` : "Cadeia de Frio Segura · MNR 2026";
+}
+
 function renderNode(last, node) {
   const pill = $("status");
   const card = $("kpi-temp");
+  renderGauge(last ? last.temp_c : null);
+  setAlarmLook(last, node);
+  $("pipe").querySelector('[data-stage="node"]').classList.toggle("silent", !!(node && node.silent));
+  $("pipe").querySelector('[data-stage="sensor"]').classList.toggle("silent", !!(node && node.silent));
   if (node && node.silent) {
     pill.className = "status silent";
     pill.innerHTML = icon("clock") + "<span>SILÊNCIO</span>";
-    card.className = "kpi kpi-temp";
+    card.className = "kpi kpi-temp hero";
   }
   if (!last) return;
   $("temp").textContent = fmtNum(last.temp_c);
@@ -130,7 +165,7 @@ function renderNode(last, node) {
   if (!node || !node.silent) {
     pill.className = `status s${last.status}`;
     pill.innerHTML = icon(STATUS_ICON[last.status]) + `<span>${STATUS[last.status]}${last.anomaly ? " · anomalia" : ""}</span>`;
-    card.className = `kpi kpi-temp s${last.status}`;
+    card.className = `kpi kpi-temp hero s${last.status}`;
   }
 }
 
@@ -257,9 +292,48 @@ function renderChain(readings, headHash) {
   state.lastBlockIdx = last[0].idx;
 }
 
+// ---------------------------------------------------------------- trilha do pacote
+// Acende as etapas a cada pacote novo. Aceito: ate o registro. Rejeitado: para no gateway,
+// que mostra o motivo, e o registro fica marcado "nao gravado". Tudo vem dos eventos reais.
+const pipeTimers = {};
+function pipeNote(id, text, restore, ms) {
+  $(id).textContent = text;
+  clearTimeout(pipeTimers[id]);
+  pipeTimers[id] = setTimeout(() => { $(id).textContent = restore; }, ms);
+}
+let pipeHoldUntil = 0; // rejeicao tem prioridade: o proximo pacote aceito nao apaga o aviso
+function pipeFire(ev) {
+  const pipe = $("pipe");
+  if (ev.kind === "aceito" && Date.now() < pipeHoldUntil) return;
+  if (ev.kind !== "aceito") pipeHoldUntil = Date.now() + 4000;
+  pipe.classList.remove("go-ok", "go-bad", "go-db");
+  void pipe.offsetWidth; // reinicia a animacao
+  if (ev.kind === "aceito") {
+    pipe.classList.add("go-ok");
+    pipeNote("gw-note", "assinatura e seq conferem", "confere assinatura e seq", 2600);
+    const blk = /bloco=(\d+)/.exec(ev.detail || "");
+    pipeNote("ledger-note", blk ? `bloco ${blk[1]} gravado` : "gravado", "cadeia de hash", 2600);
+  } else if (ev.kind === "demo_banco_adulterado") {
+    pipe.classList.add("go-db");
+    pipeNote("ledger-note", "BANCO ALTERADO", "cadeia de hash", 4000);
+  } else if (BAD.has(ev.kind)) {
+    pipe.classList.add("go-bad");
+    pipeNote("gw-note", LABELS[ev.kind] || ev.kind, "confere assinatura e seq", 4000);
+    pipeNote("ledger-note", "não gravado", "cadeia de hash", 4000);
+  }
+  if (BAD.has(ev.kind) && window.matchMedia("(max-width: 760px)").matches) {
+    toast(false, LABELS[ev.kind] || ev.kind); // no celular o painel de ataque fica longe
+  }
+}
+
 // ---------------------------------------------------------------- eventos
 function renderEvents(events) {
   const maxId = events.length ? events[0].id : 0;
+  if (state.lastEventId) {
+    const news = events.filter((e) => e.id > state.lastEventId);
+    const worst = news.find((e) => BAD.has(e.kind)) || news.find((e) => e.kind === "aceito");
+    if (worst) pipeFire(worst);
+  }
   const rows = events.filter((e) => state.filter === "all" || (state.filter === "ok" ? e.kind === "aceito" : BAD.has(e.kind)))
     .map((e) => {
       const kind = e.kind === "aceito" ? "ok" : BAD.has(e.kind) ? "bad" : "info";
@@ -351,6 +425,60 @@ async function downloadCsv() {
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 }
 
+// ---------------------------------------------------------------- QR code (abrir no celular)
+const QR = { tab: "app", urls: {} };
+const isLocalHost = () => ["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname);
+
+async function resolveAppAccess() {
+  if (!isLocalHost()) {
+    return { url: location.origin, note: "Este é o endereço que você já está usando. O celular precisa conseguir alcançá-lo (mesma rede Wi-Fi, ou internet se for o link público)." };
+  }
+  try {
+    const a = await api("/api/access");
+    if (a.urls.length) {
+      return { url: a.urls[0], others: a.urls.slice(1),
+        note: "Celular e computador precisam estar na mesma rede Wi-Fi. Se não abrir, libere o firewall do Windows para Redes privadas." + (a.password_required ? " A tela pede senha." : "") };
+    }
+    return { url: null, note: "A tela está aberta só neste computador. Para o celular conseguir abrir, reinicie com --host 0.0.0.0 (ex.: run_gateway.bat --simulate --demo-controls --host 0.0.0.0) e clique aqui de novo." };
+  } catch (e) {
+    return { url: null, note: `Não foi possível descobrir o endereço: ${e.message}` };
+  }
+}
+
+async function renderQr() {
+  const box = $("qr-box"), link = $("qr-url"), note = $("qr-note"), copy = $("qr-copy");
+  document.querySelectorAll("#qr-dialog .tab").forEach((t) => {
+    t.classList.toggle("active", t.dataset.qr === QR.tab);
+    t.setAttribute("aria-selected", t.dataset.qr === QR.tab ? "true" : "false");
+  });
+  let info;
+  if (QR.tab === "3d") {
+    info = { url: $("btn-3d").href, note: "Simulação ilustrativa da montagem em 3D (os valores são simulados). Precisa de internet no celular." };
+  } else {
+    box.textContent = "…";
+    info = await resolveAppAccess();
+  }
+  QR.urls[QR.tab] = info.url;
+  note.textContent = info.note + (info.others && info.others.length ? ` Outros endereços deste computador: ${info.others.join(", ")}.` : "");
+  copy.hidden = !info.url;
+  link.hidden = !info.url;
+  if (!info.url) { box.innerHTML = `<div class="qr-off">${icon("smartphone")}<span>QR indisponível</span></div>`; return; }
+  const qr = qrcode(0, "M");
+  qr.addData(info.url);
+  qr.make();
+  box.innerHTML = qr.createSvgTag({ cellSize: 4, margin: 16, scalable: true, // 16 = 4 modulos de zona silenciosa (norma)
+     title: `QR code: ${info.url}` });
+  link.textContent = info.url;
+  link.href = info.url;
+}
+
+function openQr() {
+  const dlg = $("qr-dialog");
+  QR.tab = "app";
+  if (typeof dlg.showModal === "function") dlg.showModal(); else dlg.setAttribute("open", "");
+  renderQr();
+}
+
 // ---------------------------------------------------------------- eventos de interface
 loadTheme();
 $("theme-btn").addEventListener("click", toggleTheme);
@@ -360,6 +488,15 @@ $("fs-btn").addEventListener("click", () => {
 });
 document.addEventListener("fullscreenchange", () => document.documentElement.classList.toggle("is-full", !!document.fullscreenElement));
 $("btn-verify").addEventListener("click", verifyChain);
+$("btn-qr").addEventListener("click", openQr);
+$("qr-close").addEventListener("click", () => $("qr-dialog").close());
+$("qr-dialog").addEventListener("click", (ev) => { if (ev.target === ev.currentTarget) ev.currentTarget.close(); });
+document.querySelectorAll("#qr-dialog .tab").forEach((t) => t.addEventListener("click", () => { QR.tab = t.dataset.qr; renderQr(); }));
+$("qr-copy").addEventListener("click", async () => {
+  try { await navigator.clipboard.writeText(QR.urls[QR.tab] || ""); toast(true, "Link copiado"); }
+  catch (e) { toast(false, "Não consegui copiar: selecione o link e copie à mão"); }
+});
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(() => { /* sem HTTPS/localhost: segue sem app instalavel */ });
 $("btn-csv").addEventListener("click", () => downloadCsv().catch((e) => toast(false, e.message)));
 document.querySelectorAll("[data-demo]").forEach((b) => b.addEventListener("click", () => demo(b.dataset.demo, b)));
 document.querySelectorAll(".tab").forEach((t) => t.addEventListener("click", () => {

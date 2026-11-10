@@ -36,6 +36,38 @@ class WebAppTests(unittest.TestCase):
         self.assertIn("Cadeia de Frio", self.client.get("/").text)
         self.assertEqual(self.client.get("/static/app.js").status_code, 200)
 
+    def test_access_for_qr_code(self):
+        # padrao do teste: escuta so em 127.0.0.1, entao nao ha endereco de rede para o QR
+        a = self.client.get("/api/access").json()
+        self.assertEqual(set(a), {"host", "port", "lan_open", "urls", "password_required"})
+        self.assertFalse(a["lan_open"])
+        self.assertEqual(a["urls"], [])
+        self.assertFalse(a["password_required"])
+
+    def test_access_lists_lan_urls_when_open_to_network(self):
+        from unittest import mock
+
+        from coldchain import webapp
+
+        cfg = Config(keys_file="/nao/existe.json")
+        cfg.web.host = "0.0.0.0"
+        cfg.web.port = 8123
+        gw = build_gateway(cfg, ":memory:")
+        with mock.patch.object(webapp, "lan_addresses", return_value=["192.168.0.20"]):
+            client = TestClient(webapp.create_app(cfg, gw, simulate=True, start_bridge=False))
+            a = client.get("/api/access").json()
+        self.assertTrue(a["lan_open"])
+        self.assertEqual(a["urls"], ["http://192.168.0.20:8123"])
+
+    def test_installable_app_files(self):
+        m = self.client.get("/manifest.webmanifest")
+        self.assertEqual(m.status_code, 200)
+        self.assertEqual(m.json()["start_url"], "/")
+        sw = self.client.get("/sw.js")
+        self.assertEqual(sw.status_code, 200)
+        self.assertIn("/api/", sw.text)  # o service worker ignora a API
+        self.assertEqual(self.client.get("/static/icons/icon-192.png").status_code, 200)
+
     def test_full_demo_flow(self):
         c = self.client
         self.feed(5)

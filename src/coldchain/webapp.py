@@ -14,6 +14,7 @@ import base64
 import logging
 import os
 import secrets
+import socket
 import struct
 import threading
 import time
@@ -43,6 +44,31 @@ log = logging.getLogger("coldchain.web")
 STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
 TEMP_OFFSET = 11  # offset do campo temp no payload (">BHIIhHBii": 1+2+4+4)
 DEMO_FORGED_TEMP = 5.0  # roteiro da demonstracao: 8,6 C vira 5,0 C
+
+
+def lan_addresses() -> list[str]:
+    """Enderecos IPv4 deste computador na rede local (sem loopback nem link-local).
+
+    O primeiro e o da rota padrao (o mais provavel de ser o Wi-Fi); nao envia nenhum pacote.
+    """
+    found: list[str] = []
+
+    def add(ip: str) -> None:
+        if ip and not ip.startswith(("127.", "169.254.", "0.")) and ip not in found:
+            found.append(ip)
+
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+            s.connect(("10.255.255.255", 1))  # UDP: so escolhe a interface, nao transmite
+            add(s.getsockname()[0])
+    except OSError:
+        pass
+    try:
+        for ip in socket.gethostbyname_ex(socket.gethostname())[2]:
+            add(ip)
+    except OSError:
+        pass
+    return found
 
 
 class HeatRequest(BaseModel):
@@ -153,7 +179,36 @@ def create_app(
     def index():
         return FileResponse(os.path.join(STATIC_DIR, "index.html"))
 
+    # App instalavel no celular (PWA): manifesto e service worker precisam estar na raiz.
+    @app.get("/manifest.webmanifest", include_in_schema=False)
+    def manifest():
+        return FileResponse(os.path.join(STATIC_DIR, "manifest.webmanifest"),
+                            media_type="application/manifest+json")
+
+    @app.get("/sw.js", include_in_schema=False)
+    def service_worker():
+        return FileResponse(os.path.join(STATIC_DIR, "sw.js"), media_type="application/javascript",
+                            headers={"Cache-Control": "no-cache"})
+
     app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
+    @app.get("/api/access")
+    def access():
+        """Enderecos para abrir a tela em outro aparelho (usado pelo QR code)."""
+        host, port = cfg.web.host, cfg.web.port
+        if host in ("0.0.0.0", "::", ""):
+            addrs = lan_addresses()
+        elif host.startswith("127.") or host in ("localhost", "::1"):
+            addrs = []
+        else:
+            addrs = [host]
+        return {
+            "host": host,
+            "port": port,
+            "lan_open": bool(addrs),
+            "urls": [f"http://{ip}:{port}" for ip in addrs],
+            "password_required": bool(password),
+        }
 
     @app.get("/api/status")
     def status():

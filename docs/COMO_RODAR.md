@@ -41,6 +41,14 @@ run_gateway.bat --simulate --demo-controls --host 0.0.0.0
 
 Descubra o IP do PC com `ipconfig` (Windows) ou `hostname -I` (Linux) e abra `http://<IP>:8000` no celular. O Windows pode pedir para liberar o firewall: aceite para "Redes privadas".
 
+### QR code e app no celular
+
+Com a tela aberta, clique em **Celular** (canto superior direito): aparece um QR code. A aba **Painel** leva ao endereço desta tela e a aba **Montagem 3D** leva à simulação ilustrativa da montagem (precisa de internet).
+
+- O QR do painel só funciona se o servidor escutar na rede, então rode com `--host 0.0.0.0` (como acima). Sem isso a tela avisa o que fazer.
+- No link público do Render o QR já aponta para o endereço certo.
+- **Instalar como app:** no celular, abra o endereço no Chrome (Android: menu → *Instalar app*) ou no Safari (iPhone: *Compartilhar → Adicionar à Tela de Início*). O app guarda só a casca da tela; os dados sempre vêm do gateway, então sem rede ele mostra "gateway fora do ar". Em rede local (sem HTTPS) o navegador pode oferecer só o atalho, sem o modo offline da casca.
+
 ## Roteiro da demonstração na tela
 
 1. **Simular aquecimento**: a temperatura passa de 8 °C e aparece ALARME. Com hardware real, aqueça o sensor com a mão.
