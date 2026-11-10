@@ -18,8 +18,8 @@ const REASONS = {
 };
 
 const state = {
-  thresholds: { low: 2, high: 8 }, badBlock: null, verifiedHead: null, filter: "all",
-  lastEventId: 0, lastBlockIdx: 0, readings: [], chart: null,
+  thresholds: { low: 2, high: 8 }, badBlock: null, badReason: null, verified: null, filter: "all",
+  lastEventId: 0, lastBlockIdx: 0, readings: [], chart: null, prevBlocked: null,
 };
 
 const icon = (name) => `<svg><use href="#i-${name}"/></svg>`;
@@ -68,7 +68,8 @@ function showResult(el, ok, html) {
 function renderStatus(s) {
   const conn = $("conn");
   conn.classList.toggle("on", s.serial.connected);
-  $("conn-text").textContent = s.serial.connected ? `ao vivo · ${s.serial.rx} pacotes` : "receptor desconectado";
+  $("conn-text").innerHTML = s.serial.connected
+    ? `ao vivo<span class="more"> · ${s.serial.rx} pacotes</span>` : "receptor desconectado";
   const mode = $("mode-chip");
   mode.className = `chip mode ${s.simulate ? "sim" : "real"}`;
   $("mode-text").textContent = s.simulate ? "modo simulado" : `hardware · ${s.serial.source || "serial"}`;
@@ -82,12 +83,19 @@ function renderStatus(s) {
   $("range").textContent = `${fmtNum(s.thresholds.low, 0)}–${fmtNum(s.thresholds.high, 0)} °C`;
   $("blocks").textContent = s.chain.blocks.toLocaleString("pt-BR");
   $("head").textContent = s.chain.head.slice(0, 12);
-  if (state.verifiedHead && state.verifiedHead !== s.chain.head) state.verifiedHead = null;
 
   const counts = s.event_counts || {};
   $("accepted").textContent = (counts.aceito || 0).toLocaleString("pt-BR");
   const blocked = ATTACK_KINDS.reduce((n, k) => n + (counts[k] || 0), 0);
   $("blocked").textContent = blocked.toLocaleString("pt-BR");
+  $("blocked-val").classList.toggle("bad-text", blocked > 0);
+  if (state.prevBlocked != null && blocked > state.prevBlocked) {
+    const card = $("kpi-blocked");
+    card.classList.remove("flash-bad");
+    void card.offsetWidth; // reinicia a animacao
+    card.classList.add("flash-bad");
+  }
+  state.prevBlocked = blocked;
   const parts = [["assinatura_invalida", "assinatura"], ["replay", "replay"], ["no_desconhecido", "nó desconhecido"]]
     .filter(([k]) => counts[k]).map(([k, n]) => `${counts[k]} ${n}`);
   $("blocked-detail").textContent = parts.length ? parts.join(" · ") : "nenhum até agora";
@@ -129,8 +137,21 @@ function renderNode(last, node) {
 // ---------------------------------------------------------------- grafico (Chart.js)
 function statusColor(st) { return cssVar(st === 2 ? "--bad" : st === 1 ? "--warn" : "--ok"); }
 
+function renderChartStats(readings) {
+  const { low, high } = state.thresholds;
+  if (!readings.length) { ["min", "max", "avg", "out"].forEach((k) => { $(`st-${k}`).textContent = "--"; }); return; }
+  const t = readings.map((r) => r.temp_c);
+  const out = t.filter((v) => v < low || v > high).length;
+  $("st-min").textContent = `${fmtNum(Math.min(...t))} °C`;
+  $("st-max").textContent = `${fmtNum(Math.max(...t))} °C`;
+  $("st-avg").textContent = `${fmtNum(t.reduce((a, b) => a + b, 0) / t.length)} °C`;
+  $("st-out").textContent = `${out} de ${t.length}`;
+  $("st-out").className = out ? "bad-text" : "";
+}
+
 function drawChart(readings) {
   state.readings = readings;
+  renderChartStats(readings);
   const labels = readings.map((r) => fmtTime(r.rx_ts));
   const data = readings.map((r) => r.temp_c);
   const colors = readings.map((r) => statusColor(r.status));
@@ -141,9 +162,9 @@ function drawChart(readings) {
   const annotations = {
     safe: { type: "box", yMin: low, yMax: high, backgroundColor: cssVar("--band"), borderWidth: 0, drawTime: "beforeDatasetsDraw" },
     hi: { type: "line", yMin: high, yMax: high, borderColor: cssVar("--bad"), borderWidth: 1, borderDash: [5, 5],
-      label: { display: true, content: `${high} °C`, position: "end", backgroundColor: "transparent", color: cssVar("--bad"), font: { size: 11, weight: "600" }, yAdjust: -9 } },
+      label: { display: true, content: `${high} °C`, position: "start", backgroundColor: "transparent", color: cssVar("--bad"), font: { size: 11, weight: "600" }, yAdjust: -9 } },
     lo: { type: "line", yMin: low, yMax: low, borderColor: cssVar("--warn"), borderWidth: 1, borderDash: [5, 5],
-      label: { display: true, content: `${low} °C`, position: "end", backgroundColor: "transparent", color: cssVar("--warn"), font: { size: 11, weight: "600" }, yAdjust: 9 } },
+      label: { display: true, content: `${low} °C`, position: "start", backgroundColor: "transparent", color: cssVar("--warn"), font: { size: 11, weight: "600" }, yAdjust: 9 } },
   };
   if (bad >= 0) {
     annotations.badpt = { type: "point", xValue: bad, yValue: data[bad], radius: 11, backgroundColor: "transparent",
@@ -198,10 +219,32 @@ function drawChart(readings) {
 }
 
 // ---------------------------------------------------------------- corrente
+function renderChainStatus(chain) {
+  const el = $("chain-status");
+  const v = state.verified;
+  let kind, ic, html;
+  if (state.badBlock != null) {
+    kind = "bad"; ic = "shield-x";
+    html = `<b>Corrente QUEBRADA</b> no bloco <b>${state.badBlock}</b>: ${REASONS[state.badReason] || esc(state.badReason || "")}`;
+  } else if (v && v.head === chain.head) {
+    kind = "ok"; ic = "shield-check";
+    html = `<b>Corrente íntegra</b> · ${v.blocks.toLocaleString("pt-BR")} ${v.blocks === 1 ? "bloco verificado" : "blocos verificados"} às ${fmtTime(v.ts)}`;
+  } else if (v) {
+    const fresh = Math.max(0, chain.blocks - v.blocks);
+    kind = "stale"; ic = "clock";
+    html = `Íntegra até o bloco ${v.blocks} · <b>${fresh}</b> ${fresh === 1 ? "bloco novo" : "blocos novos"} sem verificar`;
+  } else {
+    kind = "idle"; ic = "fingerprint";
+    html = "Ainda não verificada: clique em <b>Verificar corrente</b>";
+  }
+  el.className = `chain-status ${kind}`;
+  el.innerHTML = icon(ic) + `<span>${html}</span>`;
+}
+
 function renderChain(readings, headHash) {
   const last = readings.slice(-8).reverse();
   if (!last.length) { $("chain").innerHTML = '<div class="empty">aguardando o primeiro pacote…</div>'; return; }
-  const verified = state.verifiedHead && state.verifiedHead === headHash;
+  const verified = state.verified && state.verified.head === headHash;
   $("chain").innerHTML = last.map((r) => {
     const cls = (r.idx === state.badBlock ? "broken" : verified ? "verified" : "") +
       (state.lastBlockIdx && r.idx > state.lastBlockIdx ? " new" : "");
@@ -222,9 +265,10 @@ function renderEvents(events) {
       const kind = e.kind === "aceito" ? "ok" : BAD.has(e.kind) ? "bad" : "info";
       const ic = kind === "ok" ? "shield-check" : kind === "bad" ? "shield-alert" : "triangle-alert";
       const fresh = state.lastEventId && e.id > state.lastEventId ? "fresh" : "";
-      return `<tr class="${fresh}"><td class="t">${fmtTime(e.rx_ts)}</td><td>${e.node_id ?? "–"}</td>` +
+      const det = esc(e.detail || "");
+      return `<tr class="${fresh} ${kind === "bad" ? "bad-row" : ""}"><td class="t">${fmtTime(e.rx_ts)}</td><td>${e.node_id ?? "–"}</td>` +
         `<td><span class="badge ${kind}">${icon(ic)}${LABELS[e.kind] || esc(e.kind.toUpperCase())}</span></td>` +
-        `<td class="d">${esc(e.detail || "")}</td></tr>`;
+        `<td class="d" title="${det}">${det}</td></tr>`;
     });
   $("events").innerHTML = rows.join("") || '<tr><td colspan="4" class="t">nenhum evento neste filtro</td></tr>';
   state.lastEventId = maxId;
@@ -236,14 +280,17 @@ async function refresh() {
     const [s, readings, events] = await Promise.all([
       api("/api/status"), api("/api/readings?limit=90"), api("/api/events?limit=80"),
     ]);
+    document.body.classList.remove("offline");
     const node = renderStatus(s);
     renderNode(readings[readings.length - 1], node);
     drawChart(readings);
     renderChain(readings, s.chain.head);
+    renderChainStatus(s.chain);
     renderEvents(events);
   } catch (e) {
     $("conn").classList.remove("on");
     $("conn-text").textContent = "gateway fora do ar";
+    document.body.classList.add("offline");
   }
 }
 
@@ -251,17 +298,14 @@ async function verifyChain() {
   const btn = $("btn-verify");
   btn.disabled = true;
   try {
+    // o estado e lido antes: um bloco que chegue durante a verificacao aparece como "novo, sem verificar"
+    const before = (await api("/api/status")).chain;
     const v = await api("/api/chain/verify");
     state.badBlock = v.ok ? null : v.bloco_invalido;
-    if (v.ok) {
-      state.verifiedHead = (await api("/api/status")).chain.head;
-      showResult($("verify-result"), true, "Corrente íntegra: hash e assinatura de todos os blocos conferem.");
-      toast(true, "Corrente íntegra");
-    } else {
-      state.verifiedHead = null;
-      showResult($("verify-result"), false, `Corrente QUEBRADA no bloco <b>${v.bloco_invalido}</b>: ${REASONS[v.motivo] || v.motivo}.`);
-      toast(false, `Fraude detectada no bloco ${v.bloco_invalido}`);
-    }
+    state.badReason = v.ok ? null : v.motivo;
+    state.verified = v.ok ? { head: before.head, blocks: before.blocks, ts: Date.now() / 1000 } : null;
+  } catch (e) {
+    toast(false, `Falha ao verificar: ${e.message}`);
   } finally {
     btn.disabled = false;
     refresh();
@@ -276,17 +320,13 @@ async function demo(action, btn) {
     if (action === "tamper") {
       const blocked = r.result !== "aceito";
       showResult(el, blocked, `Pacote adulterado (${fmtNum(r.original_temp)} → ${fmtNum(r.forged_temp)} °C): <b>${LABELS[r.result] || r.result}</b>. O pacote falso não entrou na corrente.`);
-      toast(blocked, blocked ? "Adulteração bloqueada: assinatura inválida" : "Pacote adulterado ACEITO");
     } else if (action === "replay") {
       const blocked = r.result !== "aceito";
       showResult(el, blocked, `Pacote reenviado (seq ${r.seq}): <b>${LABELS[r.result] || r.result}</b>. A assinatura é válida, mas o seq já foi usado.`);
-      toast(blocked, blocked ? "Replay bloqueado" : "Replay ACEITO");
     } else if (action === "corrupt-db") {
       showResult(el, false, `Bloco <b>${r.idx}</b> editado direto no banco (${fmtNum(r.from_temp)} → ${fmtNum(r.to_temp)} °C). Clique em <b>Verificar corrente</b>.`);
-      toast(false, `Banco adulterado no bloco ${r.idx}`);
     } else {
-      state.badBlock = null; state.verifiedHead = null;
-      $("verify-result").hidden = true;
+      state.badBlock = null; state.badReason = null; state.verified = null;
       el.hidden = true;
       toast(true, "Demonstração restaurada");
     }
@@ -323,7 +363,10 @@ $("btn-verify").addEventListener("click", verifyChain);
 $("btn-csv").addEventListener("click", () => downloadCsv().catch((e) => toast(false, e.message)));
 document.querySelectorAll("[data-demo]").forEach((b) => b.addEventListener("click", () => demo(b.dataset.demo, b)));
 document.querySelectorAll(".tab").forEach((t) => t.addEventListener("click", () => {
-  document.querySelectorAll(".tab").forEach((x) => x.classList.toggle("active", x === t));
+  document.querySelectorAll(".tab").forEach((x) => {
+    x.classList.toggle("active", x === t);
+    x.setAttribute("aria-selected", x === t ? "true" : "false");
+  });
   state.filter = t.dataset.filter;
   refresh();
 }));

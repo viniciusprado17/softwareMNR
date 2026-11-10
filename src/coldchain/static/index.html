@@ -55,7 +55,7 @@
     <button class="btn ghost sm" id="btn-heat" hidden><svg><use href="#i-flame"/></svg><span>Simular aquecimento</span></button>
     <span class="chip mode" id="mode-chip"><svg><use href="#i-cpu"/></svg><span id="mode-text">—</span></span>
     <span class="chip conn" id="conn"><span class="pulse"></span><span id="conn-text">conectando…</span></span>
-    <span class="chip clock"><svg><use href="#i-clock"/></svg><span id="clock">--:--:--</span></span>
+    <span class="chip clock" aria-hidden="true"><svg><use href="#i-clock"/></svg><span id="clock">--:--:--</span></span>
     <button class="icon-btn" id="fs-btn" title="Tela cheia (apresentação)" aria-label="Tela cheia">
       <svg class="when-normal"><use href="#i-maximize"/></svg><svg class="when-full"><use href="#i-minimize"/></svg>
     </button>
@@ -70,9 +70,9 @@
   <!-- KPIs -->
   <section class="kpis">
     <article class="kpi kpi-temp" id="kpi-temp">
-      <div class="kpi-head"><svg><use href="#i-thermometer"/></svg>Temperatura · Nó <span id="node-id">–</span></div>
+      <div class="kpi-head"><svg><use href="#i-thermometer"/></svg>Temperatura · Nó <span id="node-id">–</span><span class="seq-tag">seq <b id="seq">–</b></span></div>
       <div class="kpi-value"><span id="temp">--.--</span><small>°C</small></div>
-      <div class="status" id="status"><svg><use href="#i-activity"/></svg><span>SEM DADOS</span></div>
+      <div class="status" id="status" role="status"><svg><use href="#i-activity"/></svg><span>SEM DADOS</span></div>
     </article>
     <article class="kpi">
       <div class="kpi-head"><svg><use href="#i-droplets"/></svg>Umidade</div>
@@ -84,9 +84,9 @@
       <div class="kpi-value ok-text"><span id="accepted">0</span></div>
       <div class="kpi-foot">assinatura válida e seq novo</div>
     </article>
-    <article class="kpi">
+    <article class="kpi" id="kpi-blocked">
       <div class="kpi-head"><svg><use href="#i-shield-alert"/></svg>Ataques bloqueados</div>
-      <div class="kpi-value bad-text"><span id="blocked">0</span></div>
+      <div class="kpi-value" id="blocked-val"><span id="blocked">0</span></div>
       <div class="kpi-foot" id="blocked-detail">nenhum até agora</div>
     </article>
     <article class="kpi">
@@ -97,7 +97,7 @@
     <article class="kpi">
       <div class="kpi-head"><svg><use href="#i-radio-tower"/></svg>Enlace LoRa</div>
       <div class="kpi-value sm"><span id="rssi">--</span><small>dBm</small><span class="sep">/</span><span id="snr">--</span><small>dB</small></div>
-      <div class="kpi-foot">último pacote <b id="age">–</b> · seq <b id="seq">–</b></div>
+      <div class="kpi-foot">último pacote <b id="age">–</b></div>
     </article>
   </section>
 
@@ -109,6 +109,10 @@
         <span><i class="dot ok"></i>OK</span><span><i class="dot warn"></i>ALERTA</span><span><i class="dot bad"></i>ALARME</span><span><i class="band"></i>faixa segura</span>
       </div>
     </div>
+    <div class="chart-stats" id="chart-stats" aria-label="Resumo das leituras exibidas">
+      <span>mín <b id="st-min">--</b></span><span>máx <b id="st-max">--</b></span><span>média <b id="st-avg">--</b></span>
+      <span>fora da faixa <b id="st-out">--</b></span>
+    </div>
     <div class="chart-wrap"><canvas id="chart"></canvas></div>
   </section>
 
@@ -118,9 +122,9 @@
       <h2><svg><use href="#i-link"/></svg>Corrente de hash</h2>
       <button class="btn primary" id="btn-verify"><svg><use href="#i-fingerprint"/></svg><span>Verificar corrente</span></button>
     </div>
+    <div class="chain-status idle" id="chain-status" role="status"></div>
     <p class="hint">Cada bloco guarda o hash do anterior. Os últimos blocos gravados:</p>
     <div class="chain" id="chain"><div class="empty">aguardando o primeiro pacote…</div></div>
-    <div class="result" id="verify-result" hidden></div>
   </section>
 
   <!-- Ataques -->
@@ -154,10 +158,10 @@
     <div class="card-head">
       <h2><svg><use href="#i-hash"/></svg>Registro de eventos</h2>
       <div class="head-tools">
-        <div class="tabs" role="tablist">
-          <button class="tab active" data-filter="all">Todos</button>
-          <button class="tab" data-filter="ok">Aceitos</button>
-          <button class="tab" data-filter="bad">Rejeições</button>
+        <div class="tabs" role="tablist" aria-label="Filtro de eventos">
+          <button class="tab active" role="tab" aria-selected="true" data-filter="all">Todos</button>
+          <button class="tab" role="tab" aria-selected="false" data-filter="ok">Aceitos</button>
+          <button class="tab" role="tab" aria-selected="false" data-filter="bad">Rejeições</button>
         </div>
         <button class="btn ghost sm" id="btn-csv" title="Baixar as leituras aceitas em CSV (auditoria)"><svg><use href="#i-download"/></svg><span>CSV</span></button>
       </div>
