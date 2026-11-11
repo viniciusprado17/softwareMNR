@@ -68,6 +68,34 @@ class WebAppTests(unittest.TestCase):
         self.assertIn("/api/", sw.text)  # o service worker ignora a API
         self.assertEqual(self.client.get("/static/icons/icon-192.png").status_code, 200)
 
+    def test_export_chain_for_independent_verifier(self):
+        from coldchain.ledger import GENESIS, _hash
+
+        self.feed(4)
+        doc = self.client.get("/api/export/chain").json()
+        self.assertEqual(doc["format"], "coldchain-export/1")
+        self.assertEqual(doc["curve"], "P-256")
+        self.assertEqual(doc["genesis"], GENESIS.hex())
+        self.assertEqual(doc["head"], self.client.get("/api/status").json()["chain"]["head"])
+        self.assertEqual([len(k) for k in doc["nodes"].values()], [130])
+        self.assertEqual(len(doc["blocks"]), 4)
+        # round-trip: o documento sozinho basta para refazer a corrente
+        prev = bytes.fromhex(doc["genesis"])
+        for b in doc["blocks"]:
+            self.assertEqual(b["prev_hash"], prev.hex())
+            h = _hash(prev, bytes.fromhex(b["payload"]), bytes.fromhex(b["sig"]))
+            self.assertEqual(b["hash"], h.hex())
+            prev = h
+        r = self.client.get("/api/export/chain?download=1")
+        self.assertIn("attachment", r.headers["content-disposition"])
+        self.assertIn("corrente_", r.headers["content-disposition"])
+
+    def test_verifier_page(self):
+        r = self.client.get("/verificador")
+        self.assertEqual(r.status_code, 200)
+        self.assertIn("Verificador independente", r.text)
+        self.assertEqual(self.client.get("/static/verifier-core.js").status_code, 200)
+
     def test_full_demo_flow(self):
         c = self.client
         self.feed(5)

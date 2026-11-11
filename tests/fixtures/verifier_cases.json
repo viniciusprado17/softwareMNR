@@ -1,0 +1,691 @@
+{
+ "aviso": "Gerado por tools/gen_verifier_fixtures.py. Chaves de teste.",
+ "cases": [
+  {
+   "name": "cadeia valida",
+   "doc": {
+    "format": "coldchain-export/1",
+    "curve": "P-256",
+    "genesis": "0000000000000000000000000000000000000000000000000000000000000000",
+    "nodes": {
+     "1": "046f39a00c6a1af953967b72b577c1ff14bea86e3ba4680d5482d3f287c2c2d305810cdf7116a764cfd424bc9eec4e75fa67ef74544d53675b6dfb3c708d400d0a"
+    },
+    "head": "ee9acd1ab5a16c394aaf15f8b0578b59b123c442a15643ca7b2510c94023b16a",
+    "blocks": [
+     {
+      "idx": 1,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 1,
+      "rx_ts": 1800000000,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "payload": "010001000000016b49d20001c21194007fffffff7fffffff",
+      "sig": "acdb1b2e6486002903bb4df141cf282deffa39796a6fd2d88b79ffdf9984cca1534bdadfdf31504b5b14544fbce27a2737221a9a84e5cb350c8cbf8773d23cb2",
+      "hash": "91c8416a2a13722cda365bb722e47fbe94b50a264cbbc5c1fd07fe7f4db19aeb"
+     },
+     {
+      "idx": 2,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 2,
+      "rx_ts": 1800000010,
+      "prev_hash": "91c8416a2a13722cda365bb722e47fbe94b50a264cbbc5c1fd07fe7f4db19aeb",
+      "payload": "010001000000026b49d20a01db1194007fffffff7fffffff",
+      "sig": "ebc08df2ecfc9c097b271d5d2a55cc5c9d7fda66c8929c2566267344a707844a0dfa88a5f3d042fac80cce6782c67b0edf10b3d7d02c098b1b20177fd9f8f678",
+      "hash": "0eef32f7daee64ff4faa969b8b10383b365478cef991c782059dde6b49e498e9"
+     },
+     {
+      "idx": 3,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 3,
+      "rx_ts": 1800000020,
+      "prev_hash": "0eef32f7daee64ff4faa969b8b10383b365478cef991c782059dde6b49e498e9",
+      "payload": "010001000000036b49d21401f41194007fffffff7fffffff",
+      "sig": "7f32db6934b703e5bda80afbe67b2e6f762d0b780aee99aac5bd18424bf183cf9e118d832763a4bbc74932e44cac4f092870e4e1e2c0bb053f10a13e7b523f88",
+      "hash": "b92d02140bd608717d6eed021eb3c5a1f83d9536f1133b372f2965e4ad758f10"
+     },
+     {
+      "idx": 4,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 4,
+      "rx_ts": 1800000030,
+      "prev_hash": "b92d02140bd608717d6eed021eb3c5a1f83d9536f1133b372f2965e4ad758f10",
+      "payload": "010001000000046b49d21e020d1194007fffffff7fffffff",
+      "sig": "ef159084a0bb221ca9783ee4305bc207acfa8ab66cd17e865e2018651e7e8340b1199b1bfa8700766da6d355943aa8827204c26405f216ee38a0d871c4db8aab",
+      "hash": "be1986dff89633a5deea7a198236793ccd5e8df478d24fa2df65790f98a330cd"
+     },
+     {
+      "idx": 5,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 5,
+      "rx_ts": 1800000040,
+      "prev_hash": "be1986dff89633a5deea7a198236793ccd5e8df478d24fa2df65790f98a330cd",
+      "payload": "010001000000056b49d22802261194007fffffff7fffffff",
+      "sig": "70131dd015fe3667f3c1a7c2ddb45cd17441a82e7324ef3b59d5b02f3d5696c09d632e4b1fbd8125ad2f0b530376f7c86aa9cbef027e921e01c6803b9c6ef9fe",
+      "hash": "ee9acd1ab5a16c394aaf15f8b0578b59b123c442a15643ca7b2510c94023b16a"
+     }
+    ]
+   },
+   "expected": {
+    "ok": true,
+    "bad_idx": null,
+    "reason": null
+   }
+  },
+  {
+   "name": "payload alterado",
+   "doc": {
+    "format": "coldchain-export/1",
+    "curve": "P-256",
+    "genesis": "0000000000000000000000000000000000000000000000000000000000000000",
+    "nodes": {
+     "1": "04c100b9d01f4732e871813c48ce9b536d281821a70bfb0481c5d8a54c41fd1e86a2df30821acd7de48affa8a7e99b99042ed7091c9eb50714a5cdf42d922b5979"
+    },
+    "head": "8a7ff3090bbf186cb0701eb42665ec1da2094a7b52bedf8157dfa4d2a53ea86a",
+    "blocks": [
+     {
+      "idx": 1,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 1,
+      "rx_ts": 1800000000,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "payload": "010001000000016b49d20001c21194007fffffff7fffffff",
+      "sig": "476a4317639e722520163480e70ad5488f06ed6c0f05453ba600df37c63de06d4d7cdfc439ece70b138da74d765afd8d10825caead07abe82483551d13b2d3e9",
+      "hash": "dc85261fac03c83e5d2b4f0e5e0d17d69454fe4a7a0ae650b24d80e890f08099"
+     },
+     {
+      "idx": 2,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 2,
+      "rx_ts": 1800000010,
+      "prev_hash": "dc85261fac03c83e5d2b4f0e5e0d17d69454fe4a7a0ae650b24d80e890f08099",
+      "payload": "010001000000026b49d20a01db1194007fffffff7fffffff",
+      "sig": "005feea3b1abaa497f712a063545bde71cc079c15d063b01ad42a8eccaa8cf2db180ae907eba1b7ab362b961c2917b10e634ed9946fc7855dbe4fd0b8ab1debd",
+      "hash": "985bd21f6cd8988e01ce667bc3ce82bf8ba33af6bfa3790910d85d95ecb05092"
+     },
+     {
+      "idx": 3,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 3,
+      "rx_ts": 1800000020,
+      "prev_hash": "985bd21f6cd8988e01ce667bc3ce82bf8ba33af6bfa3790910d85d95ecb05092",
+      "payload": "010001000000036b49d21401f51194007fffffff7fffffff",
+      "sig": "97876f238fa4da86d76c7e50ccc1e308a1790f29060f93167f208b31c76133d77e6e647912c99089c76a82dced5cfaa2c08590219c8fcbd3e5b58ec4182a2b40",
+      "hash": "7e11df65d85584bcd6a9fcaac5e8d103d9a4b0f07400ad28794f156d15d63a6e"
+     },
+     {
+      "idx": 4,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 4,
+      "rx_ts": 1800000030,
+      "prev_hash": "7e11df65d85584bcd6a9fcaac5e8d103d9a4b0f07400ad28794f156d15d63a6e",
+      "payload": "010001000000046b49d21e020d1194007fffffff7fffffff",
+      "sig": "d3bcbdc348ad1bdf5be144fadfa83bcf2f139b49fad4e8f2f37cc6a0521316b522f84b3c84b340c7514aca442adcabfc32f61dcd1830e9cf67e9be81e3c0e101",
+      "hash": "9b850c3a753729a8d30a1e473892974d78530246af712f143a75ad7e63f18a5f"
+     },
+     {
+      "idx": 5,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 5,
+      "rx_ts": 1800000040,
+      "prev_hash": "9b850c3a753729a8d30a1e473892974d78530246af712f143a75ad7e63f18a5f",
+      "payload": "010001000000056b49d22802261194007fffffff7fffffff",
+      "sig": "8103859206f87065737afdb914eb28d4c2cf20669872154010d98ac64b1772b7882c2768eb9739ec7df6f9e90497e2e47fd63f4bbfe11f9da63fa23d2b8563da",
+      "hash": "8a7ff3090bbf186cb0701eb42665ec1da2094a7b52bedf8157dfa4d2a53ea86a"
+     }
+    ]
+   },
+   "expected": {
+    "ok": false,
+    "bad_idx": 3,
+    "reason": "hash_quebrado"
+   }
+  },
+  {
+   "name": "prev_hash alterado",
+   "doc": {
+    "format": "coldchain-export/1",
+    "curve": "P-256",
+    "genesis": "0000000000000000000000000000000000000000000000000000000000000000",
+    "nodes": {
+     "1": "04f34b245f3b916e345c8a4a1bee0d425a403fa177f442698f2c3efc6bff45b8a2e21041aab7918345c97c4c2d92ba004ac262083a1a84b1b3e331eb6fde4da485"
+    },
+    "head": "cdc69bc8b832cfff2b0ac9e8c2e8a938ebbf029b49e96c5ba14db345b07e3afb",
+    "blocks": [
+     {
+      "idx": 1,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 1,
+      "rx_ts": 1800000000,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "payload": "010001000000016b49d20001c21194007fffffff7fffffff",
+      "sig": "a8ced14227425c5e321ea3b15227dd9bbd8d1273702600f9462c7a4f080dfff0e6b5ae5c2c977e26a3b7cafe3118345f5003efee49d411178da8321c4d4e2056",
+      "hash": "cd8d165956fcb83ace38547b85f996c93eb92b2b2191871f63350eed724cdeb8"
+     },
+     {
+      "idx": 2,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 2,
+      "rx_ts": 1800000010,
+      "prev_hash": "cd8d165956fcb83ace38547b85f996c93eb92b2b2191871f63350eed724cdeb8",
+      "payload": "010001000000026b49d20a01db1194007fffffff7fffffff",
+      "sig": "37f3a4991ad673aa19a050d46f0651fb0fa39a6beef4cde49d31b5b1d1bbf78e91f0a6fe34e5b375b655b1442f25cd904bcb49055d1604bd28f4110e05f85635",
+      "hash": "0a04dfb10b7cb7534bac25bfb09a4bd3e2b9731e650392a6297fffc2d32fb004"
+     },
+     {
+      "idx": 3,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 3,
+      "rx_ts": 1800000020,
+      "prev_hash": "0b04dfb10b7cb7534bac25bfb09a4bd3e2b9731e650392a6297fffc2d32fb004",
+      "payload": "010001000000036b49d21401f41194007fffffff7fffffff",
+      "sig": "a1169dc8827a87745987d594975f49a37beedc2a6c87d55584d100442a5eb5618d25beafe51983fee65e43cf72d2bfdba59cc90843dc9dbf43ad649d7d4057ba",
+      "hash": "2a4a8219e08f3b5f0b5f790feb670c0f1686d6b5a94b28008bf26f774d6ab511"
+     },
+     {
+      "idx": 4,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 4,
+      "rx_ts": 1800000030,
+      "prev_hash": "2a4a8219e08f3b5f0b5f790feb670c0f1686d6b5a94b28008bf26f774d6ab511",
+      "payload": "010001000000046b49d21e020d1194007fffffff7fffffff",
+      "sig": "2e40317cf1c857ac7288ae8c76a674ba9f8688c3f4afe20565ea9deeaa28ecc73d9ca39e74927e91dfb1e2e844084a3a4cfcdaf34536c564bee5251efa336969",
+      "hash": "e6b367c8b9b2dba660baba3bc1f5211f559a5730fe45f962021891fcdc4abd7d"
+     },
+     {
+      "idx": 5,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 5,
+      "rx_ts": 1800000040,
+      "prev_hash": "e6b367c8b9b2dba660baba3bc1f5211f559a5730fe45f962021891fcdc4abd7d",
+      "payload": "010001000000056b49d22802261194007fffffff7fffffff",
+      "sig": "7b36acf18906d99fe5b3038afdfbeeb7341818c128cfc5849583667790a5a68062b0cc863cee46b095c9372767f18261dc3757489746032fade3e50797c54a92",
+      "hash": "cdc69bc8b832cfff2b0ac9e8c2e8a938ebbf029b49e96c5ba14db345b07e3afb"
+     }
+    ]
+   },
+   "expected": {
+    "ok": false,
+    "bad_idx": 3,
+    "reason": "prev_hash_diferente"
+   }
+  },
+  {
+   "name": "hash alterado",
+   "doc": {
+    "format": "coldchain-export/1",
+    "curve": "P-256",
+    "genesis": "0000000000000000000000000000000000000000000000000000000000000000",
+    "nodes": {
+     "1": "0483998c2d99d2e4b05c60cc2666541e1681730d26aafe2d81f0896e151ea4e68aab5cb1127ff2669011a22f017a19616c39ebc6af88081eb440a57ed5be314213"
+    },
+    "head": "bd819b490a24581d08cce40a5c5d1d4c107717e455f998bc911e859990d07f4d",
+    "blocks": [
+     {
+      "idx": 1,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 1,
+      "rx_ts": 1800000000,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "payload": "010001000000016b49d20001c21194007fffffff7fffffff",
+      "sig": "a6c14b6cbb07efd5d52addd6242630c54fb10d4196732cd57962b529f9d9ca447b2f1af677c3085884f946d56b3c329a7724075ff6659a90bfa7dd60b0d1bfe7",
+      "hash": "f261bf0da3818d6b3f85762114e47b8a18760c2d017df0c771f881385e1e77d2"
+     },
+     {
+      "idx": 2,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 2,
+      "rx_ts": 1800000010,
+      "prev_hash": "f261bf0da3818d6b3f85762114e47b8a18760c2d017df0c771f881385e1e77d2",
+      "payload": "010001000000026b49d20a01db1194007fffffff7fffffff",
+      "sig": "ce627ab2d1f3a8dc623df1533781925aeba367e89cd9ba0d1ff9a318c2714a760625f84912103aa5e38517a31d2071354fda44372fee5bce4b0dc3ccc79b95d5",
+      "hash": "c9c8a011b97f391c1f2d54c02785a8612d359d7858546265388ac8fbb912437e"
+     },
+     {
+      "idx": 3,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 3,
+      "rx_ts": 1800000020,
+      "prev_hash": "c9c8a011b97f391c1f2d54c02785a8612d359d7858546265388ac8fbb912437e",
+      "payload": "010001000000036b49d21401f41194007fffffff7fffffff",
+      "sig": "214d9b76a8334f2e0ce9064fbaf8d181d2a2e1f28f8721b56b69df5a59b6ef1231804accc5893c0e67f19cf705bf234ed9c8454bd9d4d74d99840619ae8684f7",
+      "hash": "271f0ca08da04c88e83373cad593f8df6db5f4953c854ff9fe6cc1bd97ffc4bb"
+     },
+     {
+      "idx": 4,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 4,
+      "rx_ts": 1800000030,
+      "prev_hash": "261f0ca08da04c88e83373cad593f8df6db5f4953c854ff9fe6cc1bd97ffc4bb",
+      "payload": "010001000000046b49d21e020d1194007fffffff7fffffff",
+      "sig": "8846a27424228f28670727244964dc7695b6e5bb624c9c16e1a5bc7da7fb325239fb7c78781a4a0b70aad4a8eb938cdfb9d1951126c17c121f0458e0b62622d9",
+      "hash": "6bb471b2df38bf1ae6d80b4ba1217de23a7d254a2d3c18bffa14ed6525d41dc9"
+     },
+     {
+      "idx": 5,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 5,
+      "rx_ts": 1800000040,
+      "prev_hash": "6bb471b2df38bf1ae6d80b4ba1217de23a7d254a2d3c18bffa14ed6525d41dc9",
+      "payload": "010001000000056b49d22802261194007fffffff7fffffff",
+      "sig": "55f8f770aaf849a21e106eea6154cda1093ab64584cc0ae274d100ceda8ece51206b2372d4e49371b0f110ffa0b2dfb1cd0e517f450b3ac26c997913abd2ae8a",
+      "hash": "bd819b490a24581d08cce40a5c5d1d4c107717e455f998bc911e859990d07f4d"
+     }
+    ]
+   },
+   "expected": {
+    "ok": false,
+    "bad_idx": 3,
+    "reason": "hash_quebrado"
+   }
+  },
+  {
+   "name": "assinatura alterada com hashes refeitos",
+   "doc": {
+    "format": "coldchain-export/1",
+    "curve": "P-256",
+    "genesis": "0000000000000000000000000000000000000000000000000000000000000000",
+    "nodes": {
+     "1": "04b8c24749447aa96af5f6aa851520638b43eda3446034f22ec6e9ba953690247293666fb53ad698b0b0571995f86c6a11d81c75bf860c76bb6bbde8c095f418ad"
+    },
+    "head": "01c8d3737f65b77bda6e55e9b887fe75eddd56a965dfab1f7b8536bdbfd5837e",
+    "blocks": [
+     {
+      "idx": 1,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 1,
+      "rx_ts": 1800000000,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "payload": "010001000000016b49d20001c21194007fffffff7fffffff",
+      "sig": "45022b1ac9e2a4fa0a2b590bd969172b6d2c81d51fee17443c6b24a1f790ecb0e8812e4f6c6bab3e31ef45208fffefaa208c0f37208629cb9684fbeed90400f5",
+      "hash": "62d502d6aca0729f51182f9407df1655bcecccfcce429efdb179b1454407d505"
+     },
+     {
+      "idx": 2,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 2,
+      "rx_ts": 1800000010,
+      "prev_hash": "62d502d6aca0729f51182f9407df1655bcecccfcce429efdb179b1454407d505",
+      "payload": "010001000000026b49d20a01db1194007fffffff7fffffff",
+      "sig": "f4ccffaf177cf30a62f2021059fa00f244b419c3e8a1dead0dcc48ebc11e0d45d6483945bc76e4a49b09bb6872053a04b1b4bcf2f5a56eb12c17bc7841a3e77d",
+      "hash": "d9dfb1a3769dd363c0a9eca461587bb286a0abcc0487b7f6fdc9f811ba2f78ac"
+     },
+     {
+      "idx": 3,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 3,
+      "rx_ts": 1800000020,
+      "prev_hash": "d9dfb1a3769dd363c0a9eca461587bb286a0abcc0487b7f6fdc9f811ba2f78ac",
+      "payload": "010001000000036b49d21401f41194007fffffff7fffffff",
+      "sig": "3ce4a655dbc3a14b70558dbc77dee3083d614877773d46e23038c60dd027aa35414bc06dd6ba1b36c201582cd399db4e812fa7e75ba3453ac7b361514047fd8b",
+      "hash": "ef962d98cb9f348af385db6adaf683d01b51c1ecab2a518f16f7840d9f9f1881"
+     },
+     {
+      "idx": 4,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 4,
+      "rx_ts": 1800000030,
+      "prev_hash": "ef962d98cb9f348af385db6adaf683d01b51c1ecab2a518f16f7840d9f9f1881",
+      "payload": "010001000000046b49d21e020d1194007fffffff7fffffff",
+      "sig": "7651ca82109921cd745a81ee7a84a80dd5a3a71eb26807105e8f45000df14640d5c3d77cbfa22c2167ebcc0bba1d4285170828f3a08b6230d1635ac70b0b1cc7",
+      "hash": "2fd25fbf8f7e8841a20d7069d9809f7e14e74eb06c1c534cda9b539665de009d"
+     },
+     {
+      "idx": 5,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 5,
+      "rx_ts": 1800000040,
+      "prev_hash": "2fd25fbf8f7e8841a20d7069d9809f7e14e74eb06c1c534cda9b539665de009d",
+      "payload": "010001000000056b49d22802261194007fffffff7fffffff",
+      "sig": "8c66373f4818b4ec42b90db9c92654fd52aa8fe31923a0285c0d68cbba46b70ccddafe94088925ab077c79b01a5e8ef3eababe74a107df1898068cb30ef91692",
+      "hash": "01c8d3737f65b77bda6e55e9b887fe75eddd56a965dfab1f7b8536bdbfd5837e"
+     }
+    ]
+   },
+   "expected": {
+    "ok": false,
+    "bad_idx": 3,
+    "reason": "assinatura_invalida"
+   }
+  },
+  {
+   "name": "payload alterado com hashes refeitos",
+   "doc": {
+    "format": "coldchain-export/1",
+    "curve": "P-256",
+    "genesis": "0000000000000000000000000000000000000000000000000000000000000000",
+    "nodes": {
+     "1": "04403ba0ce2ed9b2998ab90137cca4273d2c357d97ee9c72e5fcd82d99fcac3dbdc553b751174045e3a4b98ae6aa26d536c6fb98e6e22354d521ece24506e8fd38"
+    },
+    "head": "f1a0f395a09e96119881507d3a8b5c8706cf211911bf5191ee0a790c3b5b0cd5",
+    "blocks": [
+     {
+      "idx": 1,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 1,
+      "rx_ts": 1800000000,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "payload": "010001000000016b49d20001c21194007fffffff7fffffff",
+      "sig": "d5fa6229c0a1372e5165ac1e8c63b3f2c331b318ba03c769db7149b7dff573b3562b0bfc21e14f6ae66ea49b64aaa27c9b2505425aa5a2b8764ff9dae1ecd283",
+      "hash": "5753863e1fd1c7e6303164608747a15c963338aa70b6ee28fb8e78e465ea5607"
+     },
+     {
+      "idx": 2,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 2,
+      "rx_ts": 1800000010,
+      "prev_hash": "5753863e1fd1c7e6303164608747a15c963338aa70b6ee28fb8e78e465ea5607",
+      "payload": "010001000000026b49d20a01db1194007fffffff7fffffff",
+      "sig": "c0868d5e9457ee480c7a741a9bac66c689809e16b2e7cdc789ff02e7ad80c7773017e6035b64adb7aff8d59a3ebfe0142b1b19af346a79afc02ba451dc12a1da",
+      "hash": "e1ffa535d713ba80c04a39593c97e106cdc8362639acdbe9473052bf20e14be7"
+     },
+     {
+      "idx": 3,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 3,
+      "rx_ts": 1800000020,
+      "prev_hash": "e1ffa535d713ba80c04a39593c97e106cdc8362639acdbe9473052bf20e14be7",
+      "payload": "010001000000036b49d21401f51194007fffffff7fffffff",
+      "sig": "3e707ba8a401a5945a51bd2e6191946d5de364ca6c4bf09d4e704627ff870f5782f475fbde306aefa2e243bed2cb8213f0fc1be6d46da176ba58b99c42df35d2",
+      "hash": "3f67c03baf4761decbd05adcd33f22474894669a477b6734ba06f18eb11017b8"
+     },
+     {
+      "idx": 4,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 4,
+      "rx_ts": 1800000030,
+      "prev_hash": "3f67c03baf4761decbd05adcd33f22474894669a477b6734ba06f18eb11017b8",
+      "payload": "010001000000046b49d21e020d1194007fffffff7fffffff",
+      "sig": "aa534fba021cde6e811e24dfae60c3254b14d1aac5622a70eaf41e1ec48a52f08e8338ddb8333e7d86a1176e452410b9992dbe0ff8e366f05e8ed57a943ce0e1",
+      "hash": "a73efe72836ee8fda88eee98aeb7c53693ce6d5cfd2445c68ab78af62582045d"
+     },
+     {
+      "idx": 5,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 5,
+      "rx_ts": 1800000040,
+      "prev_hash": "a73efe72836ee8fda88eee98aeb7c53693ce6d5cfd2445c68ab78af62582045d",
+      "payload": "010001000000056b49d22802261194007fffffff7fffffff",
+      "sig": "2885a0326a6a8cbba25f281de495a9c7b0b0f603ff64f2e4050c54410aefc954169eb2724f4490beaf6eca6468bb4fa8313e34e0e41643695f41723d82c40469",
+      "hash": "f1a0f395a09e96119881507d3a8b5c8706cf211911bf5191ee0a790c3b5b0cd5"
+     }
+    ]
+   },
+   "expected": {
+    "ok": false,
+    "bad_idx": 3,
+    "reason": "assinatura_invalida"
+   }
+  },
+  {
+   "name": "no sem chave publica",
+   "doc": {
+    "format": "coldchain-export/1",
+    "curve": "P-256",
+    "genesis": "0000000000000000000000000000000000000000000000000000000000000000",
+    "nodes": {},
+    "head": "484566f9f863f7f8d2db29613c14e0ba0ab478f581fd1b22bac09454f9a2571b",
+    "blocks": [
+     {
+      "idx": 1,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 1,
+      "rx_ts": 1800000000,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "payload": "010001000000016b49d20001c21194007fffffff7fffffff",
+      "sig": "53915f372ecdd78038983c480c47377e7b46ea126d3c6fb24b6da4dc7e2c6783a1f7aba0cfba430d5261f64e86f2a788e84a95f82ab88ec6a67aff66fefd05d8",
+      "hash": "cbc6a70733ab1a93fc62e4a4ccaf97ec7f5f1e0df24bbdb0635b0b18c8ef05ca"
+     },
+     {
+      "idx": 2,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 2,
+      "rx_ts": 1800000010,
+      "prev_hash": "cbc6a70733ab1a93fc62e4a4ccaf97ec7f5f1e0df24bbdb0635b0b18c8ef05ca",
+      "payload": "010001000000026b49d20a01db1194007fffffff7fffffff",
+      "sig": "ef67e88a6077694f2f32818258ba0e75e1add7cc6e465b372084fa127414e9baa607905e14bf838cd0d670beea4b97e7df1841b4ad4b9a014cf1338504483b69",
+      "hash": "259638f732fa4a9671e0b6de3d40b442a6227fbdbb086feeabbfbbd86e6535b4"
+     },
+     {
+      "idx": 3,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 3,
+      "rx_ts": 1800000020,
+      "prev_hash": "259638f732fa4a9671e0b6de3d40b442a6227fbdbb086feeabbfbbd86e6535b4",
+      "payload": "010001000000036b49d21401f41194007fffffff7fffffff",
+      "sig": "5ddfcb6907be12966b6de5fff1ca6f2b06da8f4b8def9e39886fda14814001bff33d72fcc974c13c28b6c7ba0d7bb7497efe87c095f0cf7c9b8326c56714d17c",
+      "hash": "db33b3fe21d26a4ed864aacedd0c251dffb3d5e2f6f950fdcd25607f5339628d"
+     },
+     {
+      "idx": 4,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 4,
+      "rx_ts": 1800000030,
+      "prev_hash": "db33b3fe21d26a4ed864aacedd0c251dffb3d5e2f6f950fdcd25607f5339628d",
+      "payload": "010001000000046b49d21e020d1194007fffffff7fffffff",
+      "sig": "24be2c8ce6e9a0366d292eacbf02ed7389a0f7a9dbcdf077b06a848dcb55b0145839a34bca73dbdfee5a660aebd3079ffc6fb3f9d7d54f94bf3c23e27e0b66d2",
+      "hash": "2a598c85bf835a22e3da8175fc3ce8a1dad561e03be9a4861127ace770ee05d9"
+     },
+     {
+      "idx": 5,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 5,
+      "rx_ts": 1800000040,
+      "prev_hash": "2a598c85bf835a22e3da8175fc3ce8a1dad561e03be9a4861127ace770ee05d9",
+      "payload": "010001000000056b49d22802261194007fffffff7fffffff",
+      "sig": "8fdefa5c32acc24c638fdd03b8ffde05b84c7e05dc7f27ae08bdcfec3bd4e4cec65f4dbd96ddee6af8d21324d38a13098f9d674aca040d480513fcf1e1703d46",
+      "hash": "484566f9f863f7f8d2db29613c14e0ba0ab478f581fd1b22bac09454f9a2571b"
+     }
+    ]
+   },
+   "expected": {
+    "ok": false,
+    "bad_idx": 1,
+    "reason": "assinatura_invalida"
+   }
+  },
+  {
+   "name": "resync valido",
+   "doc": {
+    "format": "coldchain-export/1",
+    "curve": "P-256",
+    "genesis": "0000000000000000000000000000000000000000000000000000000000000000",
+    "nodes": {
+     "1": "0468e5d05a6740279829f24977814f935e495f65a390093b13f917f89e0055dcf043f2631ad4dd2704e3a700150b1812cc7efaff07a328e1b05a87109322cfc5bd"
+    },
+    "head": "acbdfe6655bc745462760d1d2433a31ce5dba0f11b53ec596fd2cef362d8b984",
+    "blocks": [
+     {
+      "idx": 1,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 1,
+      "rx_ts": 1800000000,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "payload": "010001000000016b49d20001c21194007fffffff7fffffff",
+      "sig": "e4aecd909abca542a19442b4c915f93b70579c52b1c4cffb9fc2a4a69170a480c477464d7e976af2213f06621d82499e926c06115534cff4928880b3bdce363d",
+      "hash": "360ba54a8d6149d2fb84f63f2e77184c4cdca49847a6b315d42472163d1e5aef"
+     },
+     {
+      "idx": 2,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 2,
+      "rx_ts": 1800000010,
+      "prev_hash": "360ba54a8d6149d2fb84f63f2e77184c4cdca49847a6b315d42472163d1e5aef",
+      "payload": "010001000000026b49d20a01db1194007fffffff7fffffff",
+      "sig": "916e930f4b42969f41b45269a099ef5b7406c3b95aebd6dd0736b3fc4cc402baa8f1c980c0b702693ea01c23542d4e01f3436fe6b695b02a697ffb522ecff61a",
+      "hash": "3ae10a82df933d1a00cc7aae0bf2075dff08538a9c241e5cd39e5d8174b8de56"
+     },
+     {
+      "idx": 3,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 3,
+      "rx_ts": 1800000020,
+      "prev_hash": "3ae10a82df933d1a00cc7aae0bf2075dff08538a9c241e5cd39e5d8174b8de56",
+      "payload": "010001000000036b49d21401f41194007fffffff7fffffff",
+      "sig": "7a7de9e8c1e78b62d49b08a01505e13d26118bbc0bb92a55bd5edf77bcceae0cc89a69a2d87699659043c554aeef467d76b492f25b9289f6ba2e68d66d7f9d01",
+      "hash": "59f00264798bd9b9038defe70dbc94cb54dd0dbf24055f502518e5c90cd8bd83"
+     },
+     {
+      "idx": 4,
+      "kind": "resync",
+      "node_id": 1,
+      "seq": 0,
+      "rx_ts": 1800000021,
+      "prev_hash": "59f00264798bd9b9038defe70dbc94cb54dd0dbf24055f502518e5c90cd8bd83",
+      "payload": "524553594e4300016b49d215",
+      "sig": "",
+      "hash": "585444f31c9edea3a9f4f3a6702a9f7b456ed6b4e6388edaa32b5311516c20df"
+     },
+     {
+      "idx": 5,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 4,
+      "rx_ts": 1800000030,
+      "prev_hash": "585444f31c9edea3a9f4f3a6702a9f7b456ed6b4e6388edaa32b5311516c20df",
+      "payload": "010001000000046b49d21e020d1194007fffffff7fffffff",
+      "sig": "561b816e738f68c1d5efbcd2eb475ae6c44787fc911a54fab6703840a9e484fa56d335fe206677226cd2251ff9f0e2e5c5dcbf6c2121ac999690bcc652acc59c",
+      "hash": "13465ca8b0ceac753a30cedba2fbfabf6efb0231d2641224c7b26db4b150f9f9"
+     },
+     {
+      "idx": 6,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 5,
+      "rx_ts": 1800000040,
+      "prev_hash": "13465ca8b0ceac753a30cedba2fbfabf6efb0231d2641224c7b26db4b150f9f9",
+      "payload": "010001000000056b49d22802261194007fffffff7fffffff",
+      "sig": "61ab5cff745798b7699726eefdd9a114cfa0b1cc666083f0715d2deb7c67043203d5a4564e61e5a039b889fe880d6fafff79d44cbb0ba3a98178eb7bcd8586e6",
+      "hash": "acbdfe6655bc745462760d1d2433a31ce5dba0f11b53ec596fd2cef362d8b984"
+     }
+    ]
+   },
+   "expected": {
+    "ok": true,
+    "bad_idx": null,
+    "reason": null
+   }
+  },
+  {
+   "name": "resync adulterado",
+   "doc": {
+    "format": "coldchain-export/1",
+    "curve": "P-256",
+    "genesis": "0000000000000000000000000000000000000000000000000000000000000000",
+    "nodes": {
+     "1": "043006e7100422781b33eb02af4cf4e3f21b297953a952d46cda8d49ba6d76cbd912b3fae3b936de85415a76d84be6d9eaf1254737ac9e9f619fe98088d9204eef"
+    },
+    "head": "a830f3d55df7d7c5bbc2b448a2d56048bd5a9486188527389bcf20a708352deb",
+    "blocks": [
+     {
+      "idx": 1,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 1,
+      "rx_ts": 1800000000,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "payload": "010001000000016b49d20001c21194007fffffff7fffffff",
+      "sig": "200fb3724de50bcb7674fab50a4b6d01dd118411f6052a1c18173c4d4df9f3cb11ff3b8a69b1753fe3792d121630cf6da9efb008588eb460408c13499b4eb61c",
+      "hash": "fd25208bffb9affeb702bc04a32331dfc22516db2e3a5e7123eba693513aabde"
+     },
+     {
+      "idx": 2,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 2,
+      "rx_ts": 1800000010,
+      "prev_hash": "fd25208bffb9affeb702bc04a32331dfc22516db2e3a5e7123eba693513aabde",
+      "payload": "010001000000026b49d20a01db1194007fffffff7fffffff",
+      "sig": "51d6417c81c3d2922ddfe011afb719b1bb86495aed2818175f0df324e18b1e33569a9cfe7a0fbbb8f65b0e28b270fad05e53dab4b9fc4ff5d828d23a916a614b",
+      "hash": "a7b783a8ceec0153c38d2f62287672ea576572a5ee301358b5ed9e1223bceb5b"
+     },
+     {
+      "idx": 3,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 3,
+      "rx_ts": 1800000020,
+      "prev_hash": "a7b783a8ceec0153c38d2f62287672ea576572a5ee301358b5ed9e1223bceb5b",
+      "payload": "010001000000036b49d21401f41194007fffffff7fffffff",
+      "sig": "050e56b7d87623744efbb056b032054d950e0d98313664cfaf2ccbe036b8353b0cac1d4f390259fa25827d83254d20f257d688f2cff80addd00ec373364be2e0",
+      "hash": "f4300e60782f0d6c13cbc9f0b7edb0e96db6dcffe39fc2f867a70d90974a5bcf"
+     },
+     {
+      "idx": 4,
+      "kind": "resync",
+      "node_id": 1,
+      "seq": 5,
+      "rx_ts": 1800000021,
+      "prev_hash": "f4300e60782f0d6c13cbc9f0b7edb0e96db6dcffe39fc2f867a70d90974a5bcf",
+      "payload": "524553594e4300016b49d215",
+      "sig": "",
+      "hash": "65c77eb22e1d4c418b6abb57a7e1fb595ee94cbb33c7c6b5c6b5814db6b81c73"
+     },
+     {
+      "idx": 5,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 4,
+      "rx_ts": 1800000030,
+      "prev_hash": "65c77eb22e1d4c418b6abb57a7e1fb595ee94cbb33c7c6b5c6b5814db6b81c73",
+      "payload": "010001000000046b49d21e020d1194007fffffff7fffffff",
+      "sig": "ab26a0172b090a0c779353d2e36ca447b3fec0aac735f9e378851c70d5f79f7099875fd2ca8e691e90e448a91ae6ba5fe1f7de4a577c137a6ff6f75b6f01aa54",
+      "hash": "1206a3cc50e0cc045d9633c3e4db7b890ca5e386735453b048338de2fec1703e"
+     },
+     {
+      "idx": 6,
+      "kind": "data",
+      "node_id": 1,
+      "seq": 5,
+      "rx_ts": 1800000040,
+      "prev_hash": "1206a3cc50e0cc045d9633c3e4db7b890ca5e386735453b048338de2fec1703e",
+      "payload": "010001000000056b49d22802261194007fffffff7fffffff",
+      "sig": "120a11d6e85f670818e24da5e0a7583a98c7f4997570120c07fa149dfa8c3bc23a98079ce25313f78d1a5ee63c23b8277f3020a4a9a5ab4e26750caae442ced7",
+      "hash": "a830f3d55df7d7c5bbc2b448a2d56048bd5a9486188527389bcf20a708352deb"
+     }
+    ]
+   },
+   "expected": {
+    "ok": false,
+    "bad_idx": 4,
+    "reason": "coluna_divergente"
+   }
+  }
+ ]
+}

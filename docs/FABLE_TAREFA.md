@@ -77,13 +77,13 @@ Nenhum ambiente usa `keys.h` nem assina. O usuário **não grava nada ainda** (s
 - **Página** `src/coldchain/static/verificador.html` + `verificador.js`, servida em `GET /verificador` (rota como a do `index`). Visual igual ao da tela principal (mesmos tokens CSS e fontes; link para `/static/style.css`). Conteúdo: título "Verificador independente"; botões **Carregar do gateway** (busca `/api/export/chain`), **Abrir arquivo .json**, **Baixar export**; veredito grande (`#verdict`: "CORRENTE ÍNTEGRA · N blocos" ou "QUEBRADA no bloco X: motivo"); lista de blocos com ✓/✗; botão **Simular adulteração (só no navegador)** que inverte 1 bit do payload de um bloco **em memória** e reverifica, com aviso "o gateway não foi alterado". Texto fixo explicando: "Esta conferência roda no seu navegador; a chave pública vem do export; não depende do gateway estar honesto" e a ressalva honesta: **"As chaves públicas vêm do próprio arquivo; para confiança total, compare a chave com a registrada no momento da instalação do nó."**
 - No `index.html`: um link "Verificador" no topo (ao lado de "Montagem 3D"), mesmo estilo `btn ghost sm`.
 - **Gerador de casos** `tools/gen_verifier_fixtures.py` → `tests/fixtures/verifier_cases.json`: usa o `Ledger`/`Gateway` reais para montar cadeias e gravar, para cada caso, o `doc` exportado **e** o resultado de `Ledger.verify_chain(keys)` (`ok`, `bad_idx`, `reason`). Casos: cadeia válida (5 blocos); payload alterado; `prev_hash` alterado; `hash` alterado; assinatura com 1 bit trocado; bloco de nó desconhecido; cadeia com bloco `resync` válido; `resync` adulterado. **Gere o JSON e commite-o.**
-- **Teste de paridade** `tests/js/verifier.test.mjs` (`node --test tests/js/`): para cada caso, `verifyExport(doc)` deve dar exatamente o mesmo `ok/bad_idx/reason` que o Python gravou. Mais um teste com `tests/vectors.json`: o JS aceita os 4 vetores `valid` e rejeita os 2 `invalid`.
+- **Teste de paridade** `tests/js/verifier.test.mjs` (`node --test tests/js/*.test.mjs`): para cada caso, `verifyExport(doc)` deve dar exatamente o mesmo `ok/bad_idx/reason` que o Python gravou. Mais um teste com `tests/vectors.json`: o JS aceita os 4 vetores `valid` e rejeita os 2 `invalid`.
 - **Teste Python** da rota (`tests/test_webapp.py`): formato do export; `head` igual ao `/api/status`; `nodes` com chave de 130 hex; `?download=1` com o cabeçalho; e **round-trip**: o export de uma cadeia simulada passa no `Ledger.verify_chain`-equivalente (use os mesmos campos).
-- CI (`.github/workflows/ci.yml`): job `verificador-js` (`actions/setup-node@v4` com node 22; `python tools/gen_verifier_fixtures.py && git diff --exit-code tests/fixtures/verifier_cases.json && node --test tests/js/`).
+- CI (`.github/workflows/ci.yml`): job `verificador-js` (`actions/setup-node@v4` com node 22; `python tools/gen_verifier_fixtures.py && git diff --exit-code tests/fixtures/verifier_cases.json && node --test tests/js/*.test.mjs`).
 - Docs: Seção 10.5 (duas linhas novas: `GET /api/export/chain` e a página `GET /verificador`); `docs/COMO_RODAR.md` (um parágrafo curto "Verificador independente").
 - `sw.js`: **não** cache `/api/export/chain` (já ignora `/api/*`; só confirme). Pode acrescentar `/verificador` e `/static/verifier-core.js` ao `SHELL`.
 
-**Aceite (Parte 2):** testes Python (61 + novos) OK; `node --test tests/js/` OK; Playwright (sem imagem): com a tela simulada no ar e ≥ 8 blocos, abrir `/verificador`, clicar "Carregar do gateway" e `#verdict` contém "ÍNTEGRA"; clicar "Simular adulteração" e `#verdict` contém "QUEBRADA"; zero `pageerror`.
+**Aceite (Parte 2):** testes Python (61 + novos) OK; `node --test tests/js/*.test.mjs` OK; Playwright (sem imagem): com a tela simulada no ar e ≥ 8 blocos, abrir `/verificador`, clicar "Carregar do gateway" e `#verdict` contém "ÍNTEGRA"; clicar "Simular adulteração" e `#verdict` contém "QUEBRADA"; zero `pageerror`.
 **Não fazer:** nenhuma biblioteca criptográfica nova; não mexer em `ledger.py`/`crypto.py`; não transformar o export em formato "oficial" além do descrito.
 
 ## Parte 3: Bateria do artigo, prova do hash e métricas de cadeia de frio
@@ -105,7 +105,7 @@ Nenhum ambiente usa `keys.h` nem assina. O usuário **não grava nada ainda** (s
 - Extraia o cálculo para uma função pura exportável (`static/metrics.js`, módulo ES, sem DOM) e teste com `node --test tests/js/metrics.test.mjs`: série constante a 5 °C → MKT 5,00; série alternando 0 e 10 °C → o valor calculado pela fórmula acima no próprio teste (calcule independente, tolerância 1e-9); série vazia → `null`; excursões: `[5,9,9,5,1,5]` → 2.
 - Em alturas ≤ 720 px a linha já é escondida pelo CSS existente; não mude isso.
 
-**Aceite (Parte 3):** `python -m unittest` OK (≥ 61 + novos); `node --test tests/js/` OK; Playwright (DOM): clicar "Bateria do artigo" → `#attack-result` contém "14/14" e "50/50"; verificar corrente após `corrupt-db` mostra "gravado" e "recalculado"; zero `pageerror`; `python tools/repro_artigo.py` OK.
+**Aceite (Parte 3):** `python -m unittest` OK (≥ 61 + novos); `node --test tests/js/*.test.mjs` OK; Playwright (DOM): clicar "Bateria do artigo" → `#attack-result` contém "14/14" e "50/50"; verificar corrente após `corrupt-db` mostra "gravado" e "recalculado"; zero `pageerror`; `python tools/repro_artigo.py` OK.
 
 ## Parte 4 (opcional: só se as Partes 1 a 3 estiverem completas e verdes)
 
@@ -113,7 +113,7 @@ Página `GET /laudo` (imprimível): `static/laudo.html` + `laudo.js`. Busca `/ap
 
 ## Entrega (fim da tarefa)
 
-1. `PYTHONPATH=src python -m unittest discover -s tests` e `node --test tests/js/` verdes; `python tools/repro_artigo.py` OK.
+1. `PYTHONPATH=src python -m unittest discover -s tests` e `node --test tests/js/*.test.mjs` verdes; `python tools/repro_artigo.py` OK.
 2. `git push -u origin claude/eager-tesla-re5iv3` (**somente esta branch**, nunca outra; sem PR).
 3. **Relatório final em até 40 linhas:** para cada parte: `FEITA | PARCIAL | BLOQUEADA`, hash do commit; testes antes → depois (61 → N); arquivos criados/alterados; **o que não foi verificado** (compilação do firmware; ver CI); desvios do que está aqui e por quê; **o que o usuário precisa fazer na sexta** (comandos exatos da Parte 1); qualquer pino ou fato de hardware que você suspeita estar errado em `pins.h` (só anotar).
 
@@ -128,7 +128,7 @@ Página `GET /laudo` (imprimível): `static/laudo.html` + `laudo.js`. Busca `/ap
 
 **Revisão** (quando o Fable terminar):
 1. `git pull` da branch; `git log --oneline` e `git diff --stat 7fa472a..HEAD`.
-2. Rodar `bash tools/fable_preflight.sh`, `node --test tests/js/`, `python tools/repro_artigo.py`.
+2. Rodar `bash tools/fable_preflight.sh`, `node --test tests/js/*.test.mjs`, `python tools/repro_artigo.py`.
 3. Conferir o CI do GitHub (`mcp__github__actions_list`/`get_job_logs`), **principalmente os jobs `Firmware bench`**; corrigir falhas de compilação do firmware.
 4. Revisão visual: subir a tela, capturas (1366×768 e celular) da tela principal, `/verificador`, resultado da bateria e corrente quebrada com os hashes; corrigir o que estiver feio ou cortado.
 5. Conferir o princípio de honestidade (nada afirmado que não foi medido; simulado rotulado).

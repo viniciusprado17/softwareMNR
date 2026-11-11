@@ -726,6 +726,8 @@ Os botões de ataque ficam atrás de uma bandeira `--demo-controls` e **não exi
 | `GET /api/readings?limit=100` | Últimas leituras aceitas (JSON) |
 | `GET /api/events?limit=100` | Últimos eventos, incluindo rejeições |
 | `GET /api/chain/verify` | `{ok, bloco_invalido, motivo}` |
+| `GET /api/export/chain` | Corrente inteira para conferência independente: `{format, curve, genesis, nodes: {id: chave pública hex 65 B}, head, blocks: [{idx, kind, node_id, seq, rx_ts, prev_hash, payload, sig, hash}]}`, tudo em hex. `?download=1` baixa como arquivo |
+| `GET /verificador` (página) | Verificador no navegador: refaz hashes e confere as assinaturas com WebCrypto, mesmas regras e motivos de `verify_chain` (paridade testada em `tests/js/verifier.test.mjs`) |
 | `GET /api/access` | `{host, port, lan_open, urls, password_required}`: enderecos para abrir a tela em outro aparelho (QR code). `urls` fica vazio se o servidor escuta so em `127.0.0.1` |
 | `POST /api/demo/tamper` | Injeta pacote adulterado e devolve o resultado |
 | `POST /api/demo/replay` | Reenvia o último pacote aceito |

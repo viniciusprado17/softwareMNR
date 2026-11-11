@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark" class="doc">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Verificador independente · Cadeia de Frio</title>
+  <meta name="theme-color" content="#070b12">
+  <link rel="icon" href="/static/icons/icon-192.png">
+  <link rel="manifest" href="/manifest.webmanifest" crossorigin="use-credentials">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+<!-- Icones Lucide (ISC), ver vendor/LICENSES.md -->
+<symbol id="i-shield-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
+<symbol id="i-shield-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m14.5 9.5-5 5"/><path d="m9.5 9.5 5 5"/></symbol>
+<symbol id="i-fingerprint" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4"/><path d="M14 13.12c0 2.38 0 6.38-1 8.88"/><path d="M17.29 21.02c.12-.6.43-2.3.5-3.02"/><path d="M2 12a10 10 0 0 1 18-6"/><path d="M2 16h.01"/><path d="M21.8 16c.2-2 .131-5.354 0-6"/><path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2"/><path d="M8.65 22c.21-.66.45-1.32.57-2"/><path d="M9 6.8a6 6 0 0 1 9 5.2v2"/></symbol>
+<symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></symbol>
+<symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m17 8-5-5-5 5"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/></symbol>
+<symbol id="i-radio-tower" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.9 16.1C1 12.2 1 5.8 4.9 1.9"/><path d="M7.8 4.7a6.14 6.14 0 0 0-.8 7.5"/><circle cx="12" cy="9" r="2"/><path d="M16.2 4.8c2 2 2.26 5.11.8 7.47"/><path d="M19.1 1.9a9.96 9.96 0 0 1 0 14.1"/><path d="M9.5 18h5"/><path d="m8 22 4-11 4 11"/></symbol>
+<symbol id="i-flame" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"/></symbol>
+<symbol id="i-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></symbol>
+</svg>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="logo"><svg><use href="#i-fingerprint"/></svg></div>
+    <div>
+      <h1>Verificador independente</h1>
+      <p>Refaz a corrente de hash e confere cada assinatura ECDSA P-256 aqui, no seu navegador</p>
+    </div>
+  </div>
+  <div class="top-actions">
+    <a class="btn ghost sm" href="/"><svg><use href="#i-arrow-left"/></svg><span>Painel</span></a>
+  </div>
+</header>
+
+<main class="doc-main">
+  <section class="card verdict idle" id="verdict-card">
+    <div class="v-icon" id="v-icon"><svg><use href="#i-fingerprint"/></svg></div>
+    <div class="v-body">
+      <div class="v-title" id="verdict">Nenhuma corrente carregada</div>
+      <div class="v-sub" id="verdict-sub">Carregue do gateway ou abra um arquivo exportado.</div>
+    </div>
+  </section>
+
+  <section class="v-actions">
+    <button class="btn primary" id="btn-load"><svg><use href="#i-radio-tower"/></svg><span>Carregar do gateway</span></button>
+    <label class="btn ghost" for="file-in"><svg><use href="#i-upload"/></svg><span>Abrir arquivo .json</span></label>
+    <input type="file" id="file-in" accept="application/json,.json" hidden>
+    <a class="btn ghost" id="btn-download" href="/api/export/chain?download=1"><svg><use href="#i-download"/></svg><span>Baixar export</span></a>
+    <button class="btn ghost danger" id="btn-tamper" disabled><svg><use href="#i-flame"/></svg><span>Simular adulteração (só no navegador)</span></button>
+  </section>
+  <p class="v-warn" id="tamper-note" hidden></p>
+
+  <section class="v-grid">
+    <div class="card v-info">
+      <h2>Como funciona</h2>
+      <ol>
+        <li>Para cada bloco, o navegador confere que <b>prev_hash</b> é o hash do bloco anterior (o primeiro aponta para 32 bytes zero).</li>
+        <li>Recalcula <b>SHA-256(prev_hash ‖ payload ‖ assinatura)</b> e compara com o hash gravado.</li>
+        <li>Confere a <b>assinatura ECDSA P-256</b> do payload com a chave pública do nó (WebCrypto do navegador).</li>
+      </ol>
+      <p>Esta conferência roda no seu navegador: não depende do gateway estar honesto. Mesmas regras e mesmos motivos de falha do gateway.</p>
+      <p class="muted">As chaves públicas vêm do próprio arquivo; para confiança total, compare a chave com a registrada no momento da instalação do nó.</p>
+    </div>
+    <div class="card v-info">
+      <h2>Corrente carregada</h2>
+      <dl class="v-facts" id="facts"><dt>Blocos</dt><dd>–</dd></dl>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><h2>Blocos</h2><span class="muted" id="list-note"></span></div>
+    <div class="table-wrap v-table">
+      <table>
+        <thead><tr><th>Bloco</th><th>Nó · seq</th><th>Leitura</th><th>Hash</th><th>Resultado</th></tr></thead>
+        <tbody id="rows"><tr><td colspan="5" class="t">nenhuma corrente carregada</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<script type="module" src="/static/verificador.js"></script>
+</body>
+</html>

@@ -21,11 +21,12 @@ import time
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import FileResponse, Response
+from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from .config import Config
+from .export import export_chain
 from .gateway import Gateway, Outcome
 from .ledger import KIND_DATA, Block
 from .packet import PAYLOAD_LEN, STATUS_NAMES, STATUS_OK, Reading, split_packet
@@ -179,6 +180,10 @@ def create_app(
     def index():
         return FileResponse(os.path.join(STATIC_DIR, "index.html"))
 
+    @app.get("/verificador", include_in_schema=False)
+    def verifier_page():
+        return FileResponse(os.path.join(STATIC_DIR, "verificador.html"))
+
     # App instalavel no celular (PWA): manifesto e service worker precisam estar na raiz.
     @app.get("/manifest.webmanifest", include_in_schema=False)
     def manifest():
@@ -253,6 +258,15 @@ def create_app(
     @app.get("/api/events")
     def events(limit: int = 100):
         return [e.__dict__ for e in gateway.ledger.events(max(1, min(limit, 2000)))]
+
+    @app.get("/api/export/chain")
+    def export(download: int = 0):
+        """Corrente inteira para conferencia independente (verificador no navegador)."""
+        doc = export_chain(gateway.ledger, gateway.keys)
+        if not download:
+            return doc
+        name = time.strftime("corrente_%Y-%m-%d_%H-%M-%S.json")
+        return JSONResponse(doc, headers={"Content-Disposition": f'attachment; filename="{name}"'})
 
     @app.get("/api/chain/verify")
     def chain_verify():
