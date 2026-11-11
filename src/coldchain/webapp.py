@@ -173,6 +173,18 @@ def create_app(
                                 headers={"WWW-Authenticate": 'Basic realm="Cadeia de Frio MNR 2026"'})
             return await call_next(request)
 
+    # A tela sempre revalida HTML/CSS/JS: depois de um deploy (Render) o navegador nao pode
+    # misturar pagina nova com estilo velho. Com ETag a revalidacao custa so um 304.
+    UI_PAGES = ("/", "/verificador", "/laudo", "/manifest.webmanifest")
+
+    @app.middleware("http")
+    async def no_stale_ui(request: Request, call_next):
+        response = await call_next(request)
+        path = request.url.path
+        if path in UI_PAGES or path.startswith("/static/"):
+            response.headers.setdefault("Cache-Control", "no-cache")
+        return response
+
     @app.get("/healthz", include_in_schema=False)
     def healthz():
         return {"ok": True}
