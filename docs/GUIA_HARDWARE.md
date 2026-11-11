@@ -48,6 +48,44 @@ python tools/check_fw_output.py --vectors --port /dev/ttyUSB0 --seconds 15
 
 Anote também as linhas `INFO,bench_sign_us,...` e `INFO,bench_verify_us,...` em [`MEDICOES.md`](MEDICOES.md): **é o tempo de assinatura no ESP32** que substitui os 0,59 ms do PC no artigo.
 
+## Roteiro de bancada (sexta): um teste por etapa, sem chaves
+
+Logo depois de soldar, teste cada coisa **isolada** com o projeto `firmware/bench`. Nenhum destes testes assina nem usa `keys.h`. Eles seguem as etapas 4 a 7 do documento "Projeto Cadeia de Frio: o que fazer, etapa por etapa". Só passe para o próximo quando o atual der certo.
+
+> A compilação deste kit foi verificada **só pelo CI do GitHub** (job `Firmware bench`), nunca numa placa. Se algo não gravar, anote a mensagem de erro exata.
+
+Comando geral (troque `<env>`):
+
+```bash
+pio run -d firmware/bench -e <env> -t upload && pio device monitor -b 115200
+```
+
+### 1. `lifetest`: teste de vida (etapa 4)
+
+Antena conectada antes de tudo. Saída serial: `LIFE,0`, `LIFE,1`, … uma por segundo.
+**Deu certo quando:** o display mostra `VIVO` com o contador subindo e o LED branco da placa pisca.
+**Se der errado:** trocar o cabo (cabo só de carga não funciona), instalar o driver CP210x no Windows, testar a outra Heltec antes de concluir que há defeito.
+
+### 2. `i2cscan`: o sensor aparece no barramento? (etapa 5)
+
+Ligue o SHT31-D: VIN→3V3 (**nunca 5 V**), GND→GND, SDA→GPIO 41, SCL→GPIO 42. **Confira no pinout oficial da sua placa que 41 e 42 estão livres antes de energizar.** Saída serial a cada 3 s: `I2C,found,0x44` (ou `0x45`), ou `I2C,none`.
+**Deu certo quando:** aparece `I2C,found,0x44` e o display mostra `ACHOU`.
+**Se der errado:** conferir a ordem dos 4 fios e as soldas. Para testar outros pinos sem regravar, digite no monitor serial `scan <sda> <scl>` (ex.: `scan 41 42`) com os pinos conferidos no pinout; pinos do rádio, do display e da USB são recusados. Se outro par funcionar, avise para ajustar `firmware/include/pins.h`.
+
+### 3. `sensor`: temperatura e estado no display (etapas 5 e 6)
+
+Saída serial a cada 2 s: `SENS,<temp>,<umidade>,<OK|ALERTA|ALARME>`, ou `ERR,sensor`. LED externo (GPIO 4 → 220 Ω → LED → GND) acende em ALARME.
+**Deu certo quando:** o display mostra uma temperatura coerente com o ambiente, e ela sobe se você esquentar o sensor com a mão. Em sala a mais de 8 °C o estado normal já é `ALARME`: para ver `OK` e `ALERTA`, esfrie o sensor com gelo num saquinho (sem molhar) e deixe voltar.
+**Se der errado:** `ERR,sensor` → voltar ao `i2cscan`.
+
+### 4. `ping_tx` e `ping_rx`: rádio entre as duas placas (etapa 7)
+
+Grave `ping_tx` na placa do NÓ e `ping_rx` na do RECEPTOR, **as duas com antena**. Serial do nó: `TX,<n>`. Serial do receptor: `RX,<rssi>,<snr>,PING,<n>`.
+**Deu certo quando:** o receptor mostra as mensagens do nó, primeiro a poucos centímetros e depois a alguns metros. Anote RSSI e SNR em [`MEDICOES.md`](MEDICOES.md).
+**Se der errado:** `ERR,radio,<código>` na partida → conferir antena; o primeiro suspeito é a tensão do TCXO (`LORA_TCXO_V` em `firmware/include/config.h`). Sem `RX` → conferir se cada programa foi gravado na placa certa.
+
+Com os quatro testes certos, siga para B2 (firmware completo do nó, já com chave e assinatura).
+
 ## B2. Sensor e OLED (T2, T3)
 
 Ligação do SHT31-D (Seção 5.3): VIN→3V3, GND→GND, SDA→GPIO 41, SCL→GPIO 42 (Wire1). LED de alarme: GPIO 4 → resistor 220 Ω → LED → GND.

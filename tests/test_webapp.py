@@ -36,6 +36,95 @@ class WebAppTests(unittest.TestCase):
         self.assertIn("Cadeia de Frio", self.client.get("/").text)
         self.assertEqual(self.client.get("/static/app.js").status_code, 200)
 
+    def test_access_for_qr_code(self):
+        # padrao do teste: escuta so em 127.0.0.1, entao nao ha endereco de rede para o QR
+        a = self.client.get("/api/access").json()
+        self.assertEqual(set(a), {"host", "port", "lan_open", "urls", "password_required"})
+        self.assertFalse(a["lan_open"])
+        self.assertEqual(a["urls"], [])
+        self.assertFalse(a["password_required"])
+
+    def test_access_lists_lan_urls_when_open_to_network(self):
+        from unittest import mock
+
+        from coldchain import webapp
+
+        cfg = Config(keys_file="/nao/existe.json")
+        cfg.web.host = "0.0.0.0"
+        cfg.web.port = 8123
+        gw = build_gateway(cfg, ":memory:")
+        with mock.patch.object(webapp, "lan_addresses", return_value=["192.168.0.20"]):
+            client = TestClient(webapp.create_app(cfg, gw, simulate=True, start_bridge=False))
+            a = client.get("/api/access").json()
+        self.assertTrue(a["lan_open"])
+        self.assertEqual(a["urls"], ["http://192.168.0.20:8123"])
+
+    def test_installable_app_files(self):
+        m = self.client.get("/manifest.webmanifest")
+        self.assertEqual(m.status_code, 200)
+        self.assertEqual(m.json()["start_url"], "/")
+        sw = self.client.get("/sw.js")
+        self.assertEqual(sw.status_code, 200)
+        self.assertIn("/api/", sw.text)  # o service worker ignora a API
+        self.assertEqual(self.client.get("/static/icons/icon-192.png").status_code, 200)
+
+    def test_export_chain_for_independent_verifier(self):
+        from coldchain.ledger import GENESIS, _hash
+
+        self.feed(4)
+        doc = self.client.get("/api/export/chain").json()
+        self.assertEqual(doc["format"], "coldchain-export/1")
+        self.assertEqual(doc["curve"], "P-256")
+        self.assertEqual(doc["genesis"], GENESIS.hex())
+        self.assertEqual(doc["head"], self.client.get("/api/status").json()["chain"]["head"])
+        self.assertEqual([len(k) for k in doc["nodes"].values()], [130])
+        self.assertEqual(len(doc["blocks"]), 4)
+        # round-trip: o documento sozinho basta para refazer a corrente
+        prev = bytes.fromhex(doc["genesis"])
+        for b in doc["blocks"]:
+            self.assertEqual(b["prev_hash"], prev.hex())
+            h = _hash(prev, bytes.fromhex(b["payload"]), bytes.fromhex(b["sig"]))
+            self.assertEqual(b["hash"], h.hex())
+            prev = h
+        r = self.client.get("/api/export/chain?download=1")
+        self.assertIn("attachment", r.headers["content-disposition"])
+        self.assertIn("corrente_", r.headers["content-disposition"])
+
+    def test_report_page(self):
+        r = self.client.get("/laudo")
+        self.assertEqual(r.status_code, 200)
+        self.assertIn("Laudo de transporte", r.text)
+        self.assertEqual(self.client.get("/static/laudo.js").status_code, 200)
+
+    def test_verifier_page(self):
+        r = self.client.get("/verificador")
+        self.assertEqual(r.status_code, 200)
+        self.assertIn("Verificador independente", r.text)
+        self.assertEqual(self.client.get("/static/verifier-core.js").status_code, 200)
+
+    def test_battery_reproduces_article_without_touching_ledger(self):
+        self.feed(3)
+        before = self.client.get("/api/status").json()
+        r = self.client.post("/api/demo/battery").json()
+        self.assertEqual(r["classification"], {"total": 14, "correct": 14})
+        self.assertEqual((r["tamper"]["total"], r["tamper"]["rejected"], r["tamper"]["accepted"]), (50, 50, 0))
+        self.assertEqual(r["tamper"]["genuine_accepted"], 50)  # controle: o original passa
+        self.assertIn("não é medida aqui", r["note"])
+        after = self.client.get("/api/status").json()
+        self.assertEqual(after["chain"], before["chain"])
+        self.assertEqual(after["event_counts"], before["event_counts"])
+
+    def test_verify_shows_hash_proof_only_when_broken(self):
+        self.feed(5)
+        ok = self.client.get("/api/chain/verify").json()
+        self.assertNotIn("hash_gravado", ok)
+        self.client.post("/api/demo/corrupt-db")
+        v = self.client.get("/api/chain/verify").json()
+        self.assertEqual(v["motivo"], "hash_quebrado")
+        self.assertEqual(len(v["hash_gravado"]), 64)
+        self.assertNotEqual(v["hash_gravado"], v["hash_recalculado"])
+        self.assertNotIn("prev_gravado", v)
+
     def test_full_demo_flow(self):
         c = self.client
         self.feed(5)

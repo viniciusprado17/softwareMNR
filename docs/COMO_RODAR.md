@@ -41,13 +41,27 @@ run_gateway.bat --simulate --demo-controls --host 0.0.0.0
 
 Descubra o IP do PC com `ipconfig` (Windows) ou `hostname -I` (Linux) e abra `http://<IP>:8000` no celular. O Windows pode pedir para liberar o firewall: aceite para "Redes privadas".
 
+### QR code e app no celular
+
+Com a tela aberta, clique em **Celular** (canto superior direito): aparece um QR code. A aba **Painel** leva ao endereço desta tela e a aba **Montagem 3D** leva à simulação ilustrativa da montagem (precisa de internet).
+
+- O QR do painel só funciona se o servidor escutar na rede, então rode com `--host 0.0.0.0` (como acima). Sem isso a tela avisa o que fazer.
+- No link público do Render o QR já aponta para o endereço certo.
+- **Instalar como app:** no celular, abra o endereço no Chrome (Android: menu → *Instalar app*) ou no Safari (iPhone: *Compartilhar → Adicionar à Tela de Início*). O app guarda só a casca da tela; os dados sempre vêm do gateway, então sem rede ele mostra "gateway fora do ar". Em rede local (sem HTTPS) o navegador pode oferecer só o atalho, sem o modo offline da casca.
+
+### Verificador independente
+
+Botão **Verificador** no topo (ou `http://127.0.0.1:8000/verificador`). O navegador baixa a corrente, refaz cada hash e confere cada assinatura ECDSA sozinho, sem confiar no gateway. **Simular adulteração** inverte 1 bit de um bloco só na memória da página (o gateway não muda) e mostra a falha no bloco certo. **Baixar export** gera o arquivo `.json`, que pode ser conferido depois em qualquer computador com a mesma página.
+
 ## Roteiro da demonstração na tela
 
 1. **Simular aquecimento**: a temperatura passa de 8 °C e aparece ALARME. Com hardware real, aqueça o sensor com a mão.
 2. **Adulterar pacote**: aparece `ASSINATURA INVÁLIDA`.
 3. **Reenviar pacote**: aparece `REPLAY`.
 4. **Verificar corrente** (verde), depois **Adulterar o banco**, depois **Verificar corrente** de novo: fica vermelho e aponta o bloco adulterado.
-5. **Restaurar demo** antes da próxima rodada.
+5. **Bateria do artigo**: 14/14 classificações e 50/50 adulterações rejeitadas, reproduzindo os testes 1 e 2 do artigo, sem mexer na corrente real.
+6. **Verificador** (topo): a corrente conferida no navegador, sem confiar no gateway.
+7. **Restaurar demo** antes da próxima rodada.
 
 No modo simulado a tela mostra "Modo simulado: os pacotes não vêm do hardware". Diga isso à banca se usar esse modo (Plano B).
 
