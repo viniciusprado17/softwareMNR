@@ -90,6 +90,11 @@ class WebAppTests(unittest.TestCase):
         self.assertIn("attachment", r.headers["content-disposition"])
         self.assertIn("corrente_", r.headers["content-disposition"])
 
+    def test_ui_files_are_always_revalidated(self):
+        for path in ("/", "/verificador", "/laudo", "/static/style.css", "/static/app.js"):
+            self.assertEqual(self.client.get(path).headers.get("cache-control"), "no-cache", path)
+        self.assertNotIn("no-cache", self.client.get("/api/status").headers.get("cache-control", ""))
+
     def test_report_page(self):
         r = self.client.get("/laudo")
         self.assertEqual(r.status_code, 200)
