@@ -90,6 +90,12 @@ class WebAppTests(unittest.TestCase):
         self.assertIn("attachment", r.headers["content-disposition"])
         self.assertIn("corrente_", r.headers["content-disposition"])
 
+    def test_report_page(self):
+        r = self.client.get("/laudo")
+        self.assertEqual(r.status_code, 200)
+        self.assertIn("Laudo de transporte", r.text)
+        self.assertEqual(self.client.get("/static/laudo.js").status_code, 200)
+
     def test_verifier_page(self):
         r = self.client.get("/verificador")
         self.assertEqual(r.status_code, 200)

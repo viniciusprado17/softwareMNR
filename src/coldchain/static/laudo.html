@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark" class="doc">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Laudo de transporte · Cadeia de Frio</title>
+  <link rel="icon" href="/static/icons/icon-192.png">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="topbar no-print">
+  <div class="brand">
+    <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h8"/></svg></div>
+    <div><h1>Laudo de transporte</h1><p>Resumo imprimível da cadeia de frio, com conferência no navegador</p></div>
+  </div>
+  <div class="top-actions">
+    <a class="btn ghost sm" href="/">Painel</a>
+    <a class="btn ghost sm" href="/verificador">Verificador</a>
+    <button class="btn primary sm" id="btn-print">Imprimir / salvar PDF</button>
+  </div>
+</header>
+
+<main class="doc-main laudo" id="laudo">
+  <section class="card l-head">
+    <div>
+      <div class="l-kicker">Cadeia de Frio Segura · LACOR/UNIT · MNR 2026</div>
+      <h2 class="l-title">Laudo de transporte refrigerado</h2>
+      <p class="l-gen" id="l-gen">gerando…</p>
+      <p class="l-sim" id="l-sim" hidden>MODO SIMULADO: os valores deste laudo são simulados (nó virtual), não vêm do sensor.</p>
+    </div>
+    <div class="l-verdict idle" id="l-verdict">conferindo…</div>
+  </section>
+
+  <section class="l-grid">
+    <div class="card"><h3>Período</h3><dl class="v-facts" id="l-period"></dl></div>
+    <div class="card"><h3>Temperatura</h3><dl class="v-facts" id="l-temp"></dl></div>
+    <div class="card"><h3>Integridade</h3><dl class="v-facts" id="l-chain"></dl></div>
+  </section>
+
+  <section class="card l-qr-card">
+    <div class="l-qr" id="l-qr"></div>
+    <div>
+      <h3>Conferir de forma independente</h3>
+      <p>Abra o endereço abaixo (ou leia o QR) para refazer a corrente de hash e conferir cada assinatura ECDSA P-256 no seu próprio navegador.</p>
+      <p class="mono" id="l-url"></p>
+      <p class="muted">Faixa segura: <span id="l-range"></span>. MKT = temperatura cinética média (ΔH/R = 10000 K, leituras com pesos iguais). Este laudo é gerado pelo protótipo do gateway e não substitui uma validação formal.</p>
+    </div>
+  </section>
+</main>
+
+<script src="/static/vendor/qrcode.js"></script>
+<script type="module" src="/static/laudo.js"></script>
+</body>
+</html>

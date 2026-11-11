@@ -608,3 +608,32 @@ html.doc .verdict { display: flex; flex-direction: row; align-items: center; gap
   .attack-card .result { margin-top: 6px; padding: 6px 12px; }
   .result .b-note { margin-top: 1px; font-size: 11px; line-height: 1.35; }
 }
+
+/* ---------- laudo imprimivel ---------- */
+.laudo h3 { font-size: 14px; margin: 0 0 10px; }
+.l-head { display: flex; justify-content: space-between; align-items: center; gap: 18px; flex-wrap: wrap; }
+.l-kicker { color: var(--accent-2); font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.l-title { font-size: 24px; font-weight: 800; margin: 2px 0; }
+.l-gen { margin: 0; color: var(--muted); font-size: 13px; }
+.l-sim { margin: 8px 0 0; padding: 6px 10px; border-radius: 8px; background: var(--sim-bg); color: var(--sim); font-weight: 700; font-size: 12.5px; }
+.l-verdict { padding: 12px 16px; border-radius: 12px; font-weight: 800; max-width: 380px; border: 1px solid var(--line); }
+.l-verdict.ok { background: var(--ok-bg); color: var(--ok); border-color: color-mix(in srgb, var(--ok) 40%, transparent); }
+.l-verdict.bad { background: var(--bad-bg); color: var(--bad); border-color: color-mix(in srgb, var(--bad) 40%, transparent); }
+.l-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.l-qr-card { display: flex; gap: 20px; align-items: center; }
+.l-qr-card p { margin: 0 0 8px; font-size: 13.5px; }
+.l-qr { width: 150px; flex: none; background: #fff; border-radius: 12px; padding: 4px; }
+.l-qr svg { width: 100%; height: auto; display: block; }
+@media (max-width: 760px) { .l-grid { grid-template-columns: 1fr; } .l-qr-card { flex-direction: column; align-items: flex-start; } }
+@media print {
+  @page { size: A4; margin: 14mm; }
+  html.doc, html.doc body { background: #fff !important; color: #111 !important; color-scheme: light; }
+  body::before, body::after, .no-print { display: none !important; }
+  .laudo { padding: 0; max-width: none; gap: 10px; }
+  .laudo .card { background: #fff !important; border: 1px solid #ccc; box-shadow: none !important; break-inside: avoid; padding: 12px 14px; }
+  .laudo, .laudo dd, .l-title, .laudo h3 { color: #111 !important; }
+  .laudo dt, .l-gen, .muted { color: #555 !important; }
+  .l-verdict.ok { background: #e9f7ee !important; color: #15803d !important; }
+  .l-verdict.bad { background: #fdecec !important; color: #b91c1c !important; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}

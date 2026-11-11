@@ -181,6 +181,10 @@ def create_app(
     def index():
         return FileResponse(os.path.join(STATIC_DIR, "index.html"))
 
+    @app.get("/laudo", include_in_schema=False)
+    def report_page():
+        return FileResponse(os.path.join(STATIC_DIR, "laudo.html"))
+
     @app.get("/verificador", include_in_schema=False)
     def verifier_page():
         return FileResponse(os.path.join(STATIC_DIR, "verificador.html"))
