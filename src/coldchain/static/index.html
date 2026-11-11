@@ -155,7 +155,8 @@
     </div>
     <div class="chart-stats" id="chart-stats" aria-label="Resumo das leituras exibidas">
       <span>mín <b id="st-min">--</b></span><span>máx <b id="st-max">--</b></span><span>média <b id="st-avg">--</b></span>
-      <span>fora da faixa <b id="st-out">--</b></span>
+      <span>fora da faixa <b id="st-out">--</b></span><span>excursões <b id="st-exc">--</b></span>
+      <span title="Temperatura cinética média (ΔH/R = 10000 K) das leituras exibidas, pesos iguais">MKT <b id="st-mkt">--</b></span>
     </div>
     <div class="chart-wrap"><canvas id="chart"></canvas></div>
   </section>
@@ -175,7 +176,10 @@
   <section class="card attack-card" id="attack" hidden>
     <div class="card-head">
       <h2><svg><use href="#i-shield-x"/></svg>Painel de ataque <small>modo demonstração</small></h2>
-      <button class="btn ghost" data-demo="reset"><svg><use href="#i-rotate-ccw"/></svg><span>Restaurar demo</span></button>
+      <div class="head-tools">
+        <button class="btn ghost" data-demo="battery" title="Testes 1 e 2 do artigo, num gateway descartável"><svg><use href="#i-shield-check"/></svg><span>Bateria do artigo</span></button>
+        <button class="btn ghost" data-demo="reset"><svg><use href="#i-rotate-ccw"/></svg><span>Restaurar demo</span></button>
+      </div>
     </div>
     <div class="attacks">
       <button class="attack" data-demo="tamper">
@@ -239,6 +243,6 @@
 <script src="/static/vendor/chart.umd.min.js"></script>
 <script src="/static/vendor/chartjs-plugin-annotation.min.js"></script>
 <script src="/static/vendor/qrcode.js"></script>
-<script src="/static/app.js"></script>
+<script type="module" src="/static/app.js"></script>
 </body>
 </html>

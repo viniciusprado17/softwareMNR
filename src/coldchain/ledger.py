@@ -219,6 +219,24 @@ class Ledger:
             prev = b.hash
         return ChainCheck(True)
 
+    def explain_failure(self, idx: int) -> dict[str, str]:
+        """Hashes que provam a falha de um bloco: o gravado e o que o conteudo atual gera.
+
+        Nao muda o contrato de verify_chain; serve para a tela mostrar a divergencia.
+        """
+        blocks = self.blocks()
+        pos = next((i for i, b in enumerate(blocks) if b.idx == idx), None)
+        if pos is None:
+            return {}
+        b = blocks[pos]
+        expected_prev = blocks[pos - 1].hash if pos > 0 else GENESIS
+        return {
+            "hash_gravado": b.hash.hex(),
+            "hash_recalculado": _hash(b.prev_hash, b.payload, b.sig).hex(),
+            "prev_gravado": b.prev_hash.hex(),
+            "prev_esperado": expected_prev.hex(),
+        }
+
     @staticmethod
     def _check_block(b: Block, keys: dict[int, ec.EllipticCurvePublicKey]) -> str | None:
         if b.kind == KIND_RESYNC:

@@ -96,6 +96,29 @@ class WebAppTests(unittest.TestCase):
         self.assertIn("Verificador independente", r.text)
         self.assertEqual(self.client.get("/static/verifier-core.js").status_code, 200)
 
+    def test_battery_reproduces_article_without_touching_ledger(self):
+        self.feed(3)
+        before = self.client.get("/api/status").json()
+        r = self.client.post("/api/demo/battery").json()
+        self.assertEqual(r["classification"], {"total": 14, "correct": 14})
+        self.assertEqual((r["tamper"]["total"], r["tamper"]["rejected"], r["tamper"]["accepted"]), (50, 50, 0))
+        self.assertEqual(r["tamper"]["genuine_accepted"], 50)  # controle: o original passa
+        self.assertIn("não é medida aqui", r["note"])
+        after = self.client.get("/api/status").json()
+        self.assertEqual(after["chain"], before["chain"])
+        self.assertEqual(after["event_counts"], before["event_counts"])
+
+    def test_verify_shows_hash_proof_only_when_broken(self):
+        self.feed(5)
+        ok = self.client.get("/api/chain/verify").json()
+        self.assertNotIn("hash_gravado", ok)
+        self.client.post("/api/demo/corrupt-db")
+        v = self.client.get("/api/chain/verify").json()
+        self.assertEqual(v["motivo"], "hash_quebrado")
+        self.assertEqual(len(v["hash_gravado"]), 64)
+        self.assertNotEqual(v["hash_gravado"], v["hash_recalculado"])
+        self.assertNotIn("prev_gravado", v)
+
     def test_full_demo_flow(self):
         c = self.client
         self.feed(5)

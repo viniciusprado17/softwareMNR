@@ -28,7 +28,8 @@ from pydantic import BaseModel
 from .config import Config
 from .export import export_chain
 from .gateway import Gateway, Outcome
-from .ledger import KIND_DATA, Block
+from .battery import run_battery
+from .ledger import CHAIN_BROKEN_HASH, CHAIN_PREV_MISMATCH, KIND_DATA, Block
 from .packet import PAYLOAD_LEN, STATUS_NAMES, STATUS_OK, Reading, split_packet
 from .serial_bridge import (
     SerialBridge,
@@ -271,7 +272,14 @@ def create_app(
     @app.get("/api/chain/verify")
     def chain_verify():
         check = gateway.ledger.verify_chain(gateway.keys)
-        return {"ok": check.ok, "bloco_invalido": check.bad_idx, "motivo": check.reason}
+        out = {"ok": check.ok, "bloco_invalido": check.bad_idx, "motivo": check.reason}
+        # Prova visivel da quebra (campos opcionais, so quando ha divergencia de hash/elo)
+        if check.reason in (CHAIN_BROKEN_HASH, CHAIN_PREV_MISMATCH):
+            proof = gateway.ledger.explain_failure(check.bad_idx)
+            keys = (("hash_gravado", "hash_recalculado") if check.reason == CHAIN_BROKEN_HASH
+                    else ("prev_gravado", "prev_esperado"))
+            out.update({k: proof[k] for k in keys if k in proof})
+        return out
 
     if sim is not None:
         @app.post("/api/sim/heat")
@@ -324,6 +332,11 @@ def create_app(
                                      f"bloco={target.idx} {target.temp_c:.2f}C -> "
                                      f"{DEMO_FORGED_TEMP:.2f}C", target.node_id)
             return {"idx": target.idx, "from_temp": target.temp_c, "to_temp": DEMO_FORGED_TEMP}
+
+        @app.post("/api/demo/battery")
+        def demo_battery():
+            # Gateway descartavel: a corrente e os eventos reais nao mudam.
+            return run_battery(gateway.th)
 
         @app.post("/api/demo/reset")
         def demo_reset():

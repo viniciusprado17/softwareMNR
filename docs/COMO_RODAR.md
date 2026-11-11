@@ -59,7 +59,9 @@ Botão **Verificador** no topo (ou `http://127.0.0.1:8000/verificador`). O naveg
 2. **Adulterar pacote**: aparece `ASSINATURA INVÁLIDA`.
 3. **Reenviar pacote**: aparece `REPLAY`.
 4. **Verificar corrente** (verde), depois **Adulterar o banco**, depois **Verificar corrente** de novo: fica vermelho e aponta o bloco adulterado.
-5. **Restaurar demo** antes da próxima rodada.
+5. **Bateria do artigo**: 14/14 classificações e 50/50 adulterações rejeitadas, reproduzindo os testes 1 e 2 do artigo, sem mexer na corrente real.
+6. **Verificador** (topo): a corrente conferida no navegador, sem confiar no gateway.
+7. **Restaurar demo** antes da próxima rodada.
 
 No modo simulado a tela mostra "Modo simulado: os pacotes não vêm do hardware". Diga isso à banca se usar esse modo (Plano B).
 

@@ -1,6 +1,8 @@
 // Tela de demonstracao: consulta a API a cada 1 s (sem WebSocket, sem CDN).
 "use strict";
 
+import { countExcursions, meanKineticTemp } from "./metrics.js";
+
 const $ = (id) => document.getElementById(id);
 const STATUS = { 0: "OK", 1: "ALERTA", 2: "ALARME" };
 const STATUS_ICON = { 0: "circle-check", 1: "triangle-alert", 2: "flame" };
@@ -18,7 +20,7 @@ const REASONS = {
 };
 
 const state = {
-  thresholds: { low: 2, high: 8 }, badBlock: null, badReason: null, verified: null, filter: "all",
+  thresholds: { low: 2, high: 8 }, badBlock: null, badReason: null, badProof: null, verified: null, filter: "all",
   lastEventId: 0, lastBlockIdx: 0, readings: [], chart: null, prevBlocked: null,
 };
 
@@ -174,7 +176,7 @@ function statusColor(st) { return cssVar(st === 2 ? "--bad" : st === 1 ? "--warn
 
 function renderChartStats(readings) {
   const { low, high } = state.thresholds;
-  if (!readings.length) { ["min", "max", "avg", "out"].forEach((k) => { $(`st-${k}`).textContent = "--"; }); return; }
+  if (!readings.length) { ["min", "max", "avg", "out", "exc", "mkt"].forEach((k) => { $(`st-${k}`).textContent = "--"; }); return; }
   const t = readings.map((r) => r.temp_c);
   const out = t.filter((v) => v < low || v > high).length;
   $("st-min").textContent = `${fmtNum(Math.min(...t))} °C`;
@@ -182,6 +184,10 @@ function renderChartStats(readings) {
   $("st-avg").textContent = `${fmtNum(t.reduce((a, b) => a + b, 0) / t.length)} °C`;
   $("st-out").textContent = `${out} de ${t.length}`;
   $("st-out").className = out ? "bad-text" : "";
+  const exc = countExcursions(t, low, high);
+  $("st-exc").textContent = String(exc);
+  $("st-exc").className = exc ? "bad-text" : "";
+  $("st-mkt").textContent = `${fmtNum(meanKineticTemp(t))} °C`;
 }
 
 function drawChart(readings) {
@@ -253,6 +259,26 @@ function drawChart(readings) {
   ch.update("none");
 }
 
+// Contador animado (bateria do artigo). Sem animacao se o usuario pediu movimento reduzido.
+function countUp(el, to, ms = 900) {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { el.textContent = to; return; }
+  const t0 = performance.now();
+  const step = (now) => {
+    const k = Math.min(1, (now - t0) / ms);
+    el.textContent = Math.round(to * (1 - Math.pow(1 - k, 3)));
+    if (k < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+// Prova da quebra: hash gravado x hash recalculado do conteudo atual (ou elo gravado x esperado).
+const cut = (h) => `${h.slice(0, 8)}…${h.slice(-4)}`;
+function proofHtml(p) {
+  if (!p) return "";
+  return `<span class="proof mono" title="O hash gravado não bate com o recalculado a partir do conteúdo atual do bloco."><span>${p[0].padEnd(11, "\u00a0")} ${cut(p[1])}</span>` +
+    `<span>${p[2].padEnd(11, "\u00a0")} ${cut(p[3])}</span></span>`;
+}
+
 // ---------------------------------------------------------------- corrente
 function renderChainStatus(chain) {
   const el = $("chain-status");
@@ -260,7 +286,8 @@ function renderChainStatus(chain) {
   let kind, ic, html;
   if (state.badBlock != null) {
     kind = "bad"; ic = "shield-x";
-    html = `<b>Corrente QUEBRADA</b> no bloco <b>${state.badBlock}</b>: ${REASONS[state.badReason] || esc(state.badReason || "")}`;
+    html = `<b>Corrente QUEBRADA</b> no bloco <b>${state.badBlock}</b>: ${REASONS[state.badReason] || esc(state.badReason || "")}` +
+      proofHtml(state.badProof);
   } else if (v && v.head === chain.head) {
     kind = "ok"; ic = "shield-check";
     html = `<b>Corrente íntegra</b> · ${v.blocks.toLocaleString("pt-BR")} ${v.blocks === 1 ? "bloco verificado" : "blocos verificados"} às ${fmtTime(v.ts)}`;
@@ -377,6 +404,8 @@ async function verifyChain() {
     const v = await api("/api/chain/verify");
     state.badBlock = v.ok ? null : v.bloco_invalido;
     state.badReason = v.ok ? null : v.motivo;
+    state.badProof = v.hash_gravado ? ["gravado", v.hash_gravado, "recalculado", v.hash_recalculado]
+      : v.prev_gravado ? ["elo gravado", v.prev_gravado, "esperado", v.prev_esperado] : null;
     state.verified = v.ok ? { head: before.head, blocks: before.blocks, ts: Date.now() / 1000 } : null;
   } catch (e) {
     toast(false, `Falha ao verificar: ${e.message}`);
@@ -397,10 +426,18 @@ async function demo(action, btn) {
     } else if (action === "replay") {
       const blocked = r.result !== "aceito";
       showResult(el, blocked, `Pacote reenviado (seq ${r.seq}): <b>${LABELS[r.result] || r.result}</b>. A assinatura é válida, mas o seq já foi usado.`);
+    } else if (action === "battery") {
+      const c = r.classification, t = r.tamper;
+      const ok = c.correct === c.total && t.rejected === t.total && t.genuine_accepted === t.genuine_total;
+      showResult(el, ok, `<span class="battery"><span><b class="count" data-to="${c.correct}">0</b>/${c.total} classificações</span>` +
+        `<span><b class="count" data-to="${t.rejected}">0</b>/${t.total} adulterações rejeitadas</span>` +
+        `<span class="b-ctrl">controle: ${t.genuine_accepted}/${t.genuine_total} originais aceitos</span></span>` +
+        `<small class="b-note">${esc(r.note)}</small>`);
+      el.querySelectorAll(".count").forEach((n) => countUp(n, Number(n.dataset.to)));
     } else if (action === "corrupt-db") {
       showResult(el, false, `Bloco <b>${r.idx}</b> editado direto no banco (${fmtNum(r.from_temp)} → ${fmtNum(r.to_temp)} °C). Clique em <b>Verificar corrente</b>.`);
     } else {
-      state.badBlock = null; state.badReason = null; state.verified = null;
+      state.badBlock = null; state.badReason = null; state.badProof = null; state.verified = null;
       el.hidden = true;
       toast(true, "Demonstração restaurada");
     }

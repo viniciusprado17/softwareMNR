@@ -34,3 +34,7 @@ Regra: tudo que a demonstração mostrar precisa estar no artigo **ou** declarad
 | Motor de validação em nuvem | Não (Camada 3) |
 | Limiar por categoria de insumo | Sim: limiares em `config.toml`; o gateway recalcula o status e anota divergência |
 | Modelar consumo de bateria | Não |
+
+## Bateria do artigo ao vivo
+
+O botão **Bateria do artigo** (painel de ataque, com `--demo-controls`) roda na hora os testes 1 (classificação, 14 temperaturas de 2 a 15 °C) e 2 (50 adulterações da temperatura depois de assinar) da Tabela 2, num gateway descartável com chave de teste, mais um controle: os 50 pacotes originais precisam ser aceitos. O teste 3 (latência) **não** é repetido na tela: a latência do artigo (0,59 ms) foi medida em Python no PC, e a do ESP32 se mede à parte (`docs/MEDICOES.md`).

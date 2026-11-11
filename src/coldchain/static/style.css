@@ -589,3 +589,22 @@ html.doc .verdict { display: flex; flex-direction: row; align-items: center; gap
   html.doc .verdict { padding: 16px; gap: 12px; }
   .v-table th:nth-child(4), .v-table td:nth-child(4) { display: none; }
 }
+
+/* ---------- prova da quebra e bateria do artigo ---------- */
+.chain-status .proof { display: block; margin-top: 4px; font-size: 11.5px; font-weight: 500; opacity: .95; }
+.chain-status .proof span { display: block; white-space: nowrap; }
+.chain-status.bad { align-items: flex-start; }
+.result .battery { display: flex; flex-wrap: wrap; gap: 4px 22px; align-items: baseline; }
+.result .battery .count { font-size: 22px; font-weight: 800; letter-spacing: -.02em; }
+.result .b-ctrl { font-size: 12px; font-weight: 600; opacity: .85; }
+.result .b-note { display: block; margin-top: 4px; font-size: 11.5px; font-weight: 500; color: var(--muted); }
+.attack-card .head-tools .btn { height: 32px; padding: 0 12px; }
+/* modo apresentacao: com um resultado na tela, os cartoes de ataque ficam so com titulo e esperado */
+@media (min-width: 1000px) and (min-height: 560px) {
+  .attack-card:has(#attack-result:not([hidden])) :is(.a-body span, .a-expect) { display: none; }
+  .attack-card:has(#attack-result:not([hidden])) .attack { padding: 8px 12px; align-items: center; }
+  .attack-card:has(#attack-result:not([hidden])) .a-icon { grid-row: span 1; width: 30px; height: 30px; }
+  .attack-card:has(#attack-result:not([hidden])) .attacks { flex: none; }
+  .attack-card .result { margin-top: 6px; padding: 6px 12px; }
+  .result .b-note { margin-top: 1px; font-size: 11px; line-height: 1.35; }
+}

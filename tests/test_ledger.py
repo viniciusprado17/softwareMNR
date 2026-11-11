@@ -117,5 +117,23 @@ class LedgerMigrationTests(unittest.TestCase):
             ledger.close()
 
 
+
+class ExplainFailureTests(unittest.TestCase):
+    def test_explains_payload_edit(self):
+        from coldchain.ledger import GENESIS
+
+        _, node, ledger, gw = make_setup()
+        for t in (4.0, 5.0, 6.0):
+            gw.receive(node.make_packet(t))
+        b = ledger.blocks()[1]
+        ledger.db.execute("UPDATE blocks SET payload=? WHERE idx=?", (b"\x00" * 24, b.idx))
+        e = ledger.explain_failure(b.idx)
+        self.assertEqual(e["hash_gravado"], b.hash.hex())
+        self.assertNotEqual(e["hash_recalculado"], e["hash_gravado"])
+        self.assertEqual(e["prev_gravado"], e["prev_esperado"])
+        self.assertEqual(ledger.explain_failure(1)["prev_esperado"], GENESIS.hex())
+        self.assertEqual(ledger.explain_failure(999), {})
+
+
 if __name__ == "__main__":
     unittest.main()
