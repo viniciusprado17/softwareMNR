@@ -217,7 +217,11 @@ def make_sim_node(cfg: Config, gateway: Gateway) -> SimNode:
     else:
         key = crypto.generate_keypair()
     gateway.keys[node_id] = key.public_key()
-    return SimNode(node_id, key, cfg.thresholds, seed=cfg.sim.seed)
+    node = SimNode(node_id, key, cfg.thresholds, seed=cfg.sim.seed)
+    # Continua o seq do ledger: ao reabrir o gateway com o mesmo banco, o no simulado
+    # nao recomeca do 1 (o que seria rejeitado como replay).
+    node.seq = gateway.ledger.last_seq(node_id) or 0
+    return node
 
 
 def build_gateway(cfg: Config, db_path: str | None = None) -> Gateway:
