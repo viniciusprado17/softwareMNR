@@ -1,6 +1,6 @@
 # Prompt para a sessão no notebook (MNR 2026)
 
-Como usar: no notebook, abra o app do Claude, aba Code, escolha uma pasta vazia (por exemplo `C:\Users\<seu usuario>\Projetos`) e cole tudo o que está dentro do bloco abaixo.
+Como usar: (1) no notebook, abra o PowerShell e rode o comando do "PASSO ZERO" abaixo (instala tudo e clona o projeto); (2) abra o app do Claude, aba Code, na pasta C:SERS<USUARIO>PROJETOSSOFTWAREMNR E COLE O BLOCO DE TEXTO.
 
 ```text
 Título da sessão: MNR 2026 no notebook: placas, gateway e demonstração
