@@ -61,6 +61,13 @@ A Tabela 3 do artigo (evolucoes propostas) e o roteiro: SHT31 real, latencia rea
 - Guia do Bloco B: `docs/GUIA_HARDWARE.md`. Medicoes: `docs/MEDICOES.md`. Diferencas: `docs/ARTIGO_X_DEMONSTRACAO.md`. Decisoes: `docs/DECISOES.md`.
 - Tela sem hardware: `./run_gateway.sh --simulate --demo-controls` (http://127.0.0.1:8000).
 
+## Notebook da fase nacional (16/11)
+- Preparado com `tools/setup_notebook.ps1` em `C:\Users\vinic\Projetos\softwareMNR` (ramo main). 69 testes OK, `vectest` compila.
+- Conferido na tela simulada: excursao OK -> ALERTA -> ALARME, adulteracao de pacote (assinatura invalida), replay e adulteracao do banco (corrente quebrada no bloco editado).
+- Corrigido: no simulado agora continua o seq do ledger ao reabrir o gateway (antes virava REPLAY em massa).
+- Nenhuma placa gravada ainda. Falta no notebook: driver CP210x, Claude Code local, copiar `keys/` do PC antigo (se existir).
+- Proximo passo: E1 (gravar `vectest` na placa 1, monitor 115200).
+
 ## Maximizacao com o Fable (gatilho do usuario)
 Quando o usuario disser **COMECAR MAXIMIZACAO** (com ou sem acento, qualquer caixa): rodar `bash tools/fable_preflight.sh`, e se estiver OK delegar a tarefa inteira de `docs/FABLE_TAREFA.md` a um agente `model: "fable"` (um so, na branch atual, sem worktree), seguindo o "Procedimento do Claude principal" do proprio arquivo (disparo e revisao). Sem a frase, **nao** disparar o Fable: ele consome muito. O firmware nao compila na maquina da sessao (registro do PlatformIO bloqueado): a prova e o CI.
 
