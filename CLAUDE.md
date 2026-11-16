@@ -65,8 +65,10 @@ A Tabela 3 do artigo (evolucoes propostas) e o roteiro: SHT31 real, latencia rea
 - Preparado com `tools/setup_notebook.ps1` em `C:\Users\vinic\Projetos\softwareMNR` (ramo main). 69 testes OK, `vectest` compila.
 - Conferido na tela simulada: excursao OK -> ALERTA -> ALARME, adulteracao de pacote (assinatura invalida), replay e adulteracao do banco (corrente quebrada no bloco editado).
 - Corrigido: no simulado agora continua o seq do ledger ao reabrir o gateway (antes virava REPLAY em massa).
-- Nenhuma placa gravada ainda. Falta no notebook: driver CP210x, Claude Code local, copiar `keys/` do PC antigo (se existir).
-- Proximo passo: E1 (gravar `vectest` na placa 1, monitor 115200).
+- `firmware/include/pins.h` **conferido** contra a documentacao oficial da Heltec V3 (pins_arduino.h e GPIO Usage Guide, wiki.heltec.org): OLED SDA/SCL/RST (17/18/21), Vext (36, nivel baixo liga) e pinos do SX1262 batem. GPIO 41/42 livres para o sensor (tem funcao JTAG padrao desativavel, e sao o Wire padrao do framework Arduino; o firmware ja chama `Wire1.begin(41, 42)` explicitamente em `firmware/bench/src/i2cscan.cpp`, sem ambiguidade). Sem bloqueio para ligar o SHT31-D.
+- **E1 feito (16/11):** `vectest` gravado nas duas Heltec V3 (COM3, USB-C de dados). As duas imprimem `INFO,vectest fw=vectest-1.0` e `SELFTEST,OK`.
+- **E2 feito (16/11):** `check_fw_output.py --vectors` confirma `falhas=0` contra os vetores dourados. Medido na placa 2 (sem sensor/GPS ligados, 240 MHz): assinatura 88,05 ms e verificacao 95,53 ms (n=100, micro-ecc), registrado em `docs/MEDICOES.md` e `docs/ARTIGO_X_DEMONSTRACAO.md`.
+- Proximo passo: E3 (scanner I2C no Wire1 com o SHT31-D ligado — falta combinar os fios com o Vini antes de ligar).
 
 ## Maximizacao com o Fable (gatilho do usuario)
 Quando o usuario disser **COMECAR MAXIMIZACAO** (com ou sem acento, qualquer caixa): rodar `bash tools/fable_preflight.sh`, e se estiver OK delegar a tarefa inteira de `docs/FABLE_TAREFA.md` a um agente `model: "fable"` (um so, na branch atual, sem worktree), seguindo o "Procedimento do Claude principal" do proprio arquivo (disparo e revisao). Sem a frase, **nao** disparar o Fable: ele consome muito. O firmware nao compila na maquina da sessao (registro do PlatformIO bloqueado): a prova e o CI.
