@@ -8,8 +8,8 @@ Registrar **data, versão do firmware e condições** de cada medição. Nunca p
 |---|---|---|---|---|---|---|---|---|---|
 | 19/10/2026 | PC de desenvolvimento (x86_64, Python 3.13, OpenSSL) | `tools/bench_python.py` | assinatura | 200 | 0,028 ms | 0,025 | 0,051 | 0,004 | **Não comparável** com o artigo nem com o ESP32 |
 | 19/10/2026 | idem | idem | verificação | 200 | 0,078 ms | 0,071 | 0,122 | 0,009 | idem |
-| | ESP32-S3 (Heltec V3) | vectest-1.0 (`INFO,bench_sign_us`) | assinatura | 100 | não medido | | | | |
-| | ESP32-S3 (Heltec V3) | vectest-1.0 (`INFO,bench_verify_us`) | verificação | 100 | não medido | | | | |
+| 16/11/2026 | ESP32-S3 (Heltec V3, placa 2, sem sensor/GPS ligados, 240 MHz) | vectest-1.0 (`INFO,bench_sign_us`) | assinatura | 100 | 88,05 ms | 88,05 | 88,06 | 0,002 ms | micro-ecc deterministico, cc_sign |
+| 16/11/2026 | ESP32-S3 (Heltec V3, placa 2, sem sensor/GPS ligados, 240 MHz) | vectest-1.0 (`INFO,bench_verify_us`) | verificação | 100 | 95,53 ms | 95,52 | 95,57 | 0,006 ms | micro-ecc, cc_verify |
 | | Raspberry Pi 3B | `tools/bench_python.py` | verificação | 1000 | não medido | | | | |
 
 Referência do artigo: 0,59 ms (mín 0,51, máx 0,69), n = 100, biblioteca Python `ecdsa` (secp256k1) em CPU de PC.
