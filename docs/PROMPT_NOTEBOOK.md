@@ -6,8 +6,9 @@ Como usar: no notebook, abra o app do Claude, aba Code, escolha uma pasta vazia 
 Título da sessão: MNR 2026 no notebook: placas, gateway e demonstração
 
 PASSO ZERO (fazer antes de tudo)
-1. Clonar o repositório público: git clone https://github.com/viniciusprado17/softwareMNR.git
+1. Clonar o repositório público: git clone -b main https://github.com/viniciusprado17/softwareMNR.git
    (se o Git não existir: winget install -e --id Git.Git, e me avise).
+   ATENÇÃO: use o ramo main. O ramo padrão do GitHub está num ramo antigo (claude/...), 11 commits atrás.
 2. Trabalhar SEMPRE dentro da pasta softwareMNR. Este é o notebook que vai para a fase nacional,
    então tudo da demonstração precisa rodar aqui.
 3. Ler, nesta ordem: CLAUDE.md, docs/ESPECIFICACAO.md (Seções 15 e 16 e o plano A1..B8),
