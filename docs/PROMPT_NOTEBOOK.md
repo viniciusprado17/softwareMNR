@@ -33,7 +33,7 @@ CONTEXTO
 
 O QUE JÁ FOI FEITO EM OUTRO PC (16/11), PARA VOCÊ NÃO REPETIR À TOA
 - No PC de mesa: Python 3.12 instalado via winget, requirements-dev.txt instalado, PlatformIO
-  6.2.0 ok, "python -m unittest discover -s tests" passou com 58 testes (o CLAUDE.md ainda diz
+  6.2.0 ok, "python -m unittest discover -s tests" passou com 68 testes no ramo main (o CLAUDE.md ainda diz
   56: corrigir no fechamento), firmware/vectest compilou (a primeira compilação baixa o
   toolchain do ESP32-S3 e leva uns 5 minutos). Nada foi gravado em placa.
 - Lições do PC: o Python do winget não entrou no PATH. Se "python" ou "pio" não funcionarem,
@@ -68,7 +68,7 @@ REGRAS DE CÓDIGO E HONESTIDADE
 
 PLANO (siga a ordem, uma etapa por vez, só avance quando o critério passar)
 E0. Preparar o notebook: Git, Python 3.10+, "pip install -r requirements-dev.txt" (inclui
-    PlatformIO), "pio --version" e os testes (58 devem passar). Compile firmware/vectest já,
+    PlatformIO), "pio --version" e os testes (68 devem passar no main). Compile firmware/vectest já,
     antes de eu plugar a placa. Se faltar algo, instale e me avise.
 E1. B1, bring-up das duas placas: gravar firmware/vectest em cada Heltec
     ("pio run -t upload" e "pio device monitor" a 115200, com --upload-port/--port COMx se
