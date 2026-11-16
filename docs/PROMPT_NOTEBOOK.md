@@ -1,6 +1,14 @@
 # Prompt para a sessão no notebook (MNR 2026)
 
-Como usar: (1) no notebook, abra o PowerShell e rode o comando do "PASSO ZERO" abaixo (instala tudo e clona o projeto); (2) abra o app do Claude, aba Code, na pasta C:SERS<USUARIO>PROJETOSSOFTWAREMNR E COLE O BLOCO DE TEXTO.
+Como usar no notebook:
+
+1. Abra o PowerShell e cole este comando (instala Git, Python e PlatformIO, clona o ramo main, roda os testes e compila o vectest; leva uns 10 a 15 minutos):
+
+   ```powershell
+   irm https://raw.githubusercontent.com/viniciusprado17/softwareMNR/main/tools/setup_notebook.ps1 -OutFile $env:TEMP\setup_mnr.ps1; powershell -ExecutionPolicy Bypass -File $env:TEMP\setup_mnr.ps1
+   ```
+
+2. Abra o app do Claude, aba Code, na pasta `C:\Users\<seu usuario>\Projetos\softwareMNR` e cole o bloco de texto abaixo.
 
 ```text
 Título da sessão: MNR 2026 no notebook: placas, gateway e demonstração
