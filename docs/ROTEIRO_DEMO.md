@@ -9,10 +9,10 @@ ponta em 19/11/2026. Diferenças a declarar: `docs/ARTIGO_X_DEMONSTRACAO.md` e `
 2. **Receptora** no cabo marcado **DADOS**, no notebook.
 3. **Transmissora** e **Uno** no notebook (terra em comum pela USB e pelo fio GND direto).
    Powerbank só se for testado antes: ele desliga sozinho com consumo baixo.
-4. Duplo clique no atalho **iniciar_demo.bat** (Área de Trabalho). Ele acha a receptora sozinho e
+4. Pasta **MNR 2026** na Área de Trabalho (criada por `tools\criar_atalhos.ps1`): duplo clique em **1 - Iniciar demonstracao**. Ele acha a receptora sozinho e
    abre a tela. Se não achar, oferece o modo simulado (Plano B).
 5. Na tela: **Restaurar demo**. Esperar 2 ou 3 pacotes chegarem.
-6. Conferência rápida (opcional, outro PowerShell): `python tools/teste_ponta_a_ponta.py`.
+6. Conferência rápida (opcional): **2 - Teste completo** (com a tela aberta).
    Ele termina com **Restaurar demo**, a tela fica limpa.
 
 ## 2. Os 5 minutos no estande
