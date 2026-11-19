@@ -26,6 +26,7 @@ Referência do artigo: 0,59 ms (mín 0,51, máx 0,69), n = 100, biblioteca Pytho
 
 | Data | Cenário | SF | Enviados (seq) | Aceitos | Entrega | RSSI médio | SNR médio |
 |---|---|---|---|---|---|---|---|
+| 19/11/2026 | Bancada, mesma mesa (distância não medida), receptora no notebook, log do gateway 12:14 a 12:20 | 7 | 42 (seq 145 a 186) | 42 | 100 % | -41,3 dBm (-54 a -34) | 12,6 dB (11,2 a 13,8) |
 | | 1 m, linha de visada | 7 | | | | | |
 | | 5 m | 7 | | | | | |
 | | Através de parede | 7 | | | | | |
