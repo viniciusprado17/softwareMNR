@@ -74,7 +74,10 @@ A Tabela 3 do artigo (evolucoes propostas) e o roteiro: SHT31 real, latencia rea
 ## Prototipo montado pela equipe (18/11) e integracao (19/11)
 - Montagem real: SHT31 e GPS no Arduino Uno; Uno manda texto `T:..C U:..% GPS:..` a 9600 pelo D3 -> divisor 3x1k -> GPIO41 da Heltec transmissora; LoRa 915 MHz -> Heltec receptora. Manual, guia e sketches originais em `prototipo_lacor/`.
 - Integracao: firmware `node` ganhou o ambiente `heltec_v3_node_uno` (`-DSENSOR_UNO=1`): le a linha do Uno (`cc_uno.cpp`, testado em `firmware/test_host`), decide, assina e transmite o pacote de 88 bytes. Receptora usa `firmware/receiver`. Nenhum fio muda; o Uno nao e regravado. Passo a passo: `docs/PROTOTIPO_UNO.md`.
-- Nao compilado aqui (PlatformIO bloqueado na sessao da nuvem): compilar no notebook ou CI antes de gravar.
+- **Gravado e funcionando ponta a ponta em 19/11** (relato da equipe, com telas): Uno -> transmissora (node_uno, assina) -> LoRa -> receptora (receiver) -> gateway -> tela; gelo no sensor baixa a temperatura em tempo real. Medido: assinatura 88,35 ms no no, tx 161 ms (MEDICOES).
+- Achados: terra comum obrigatorio (fio GND direto Heltec-Uno); powerbank desliga com consumo baixo; so 1 cabo USB-C de dados; com 2 Heltec no notebook as COM trocam (`tools/achar_portas.py`).
+- Abrir a demonstracao: `iniciar_demo.bat` (acha a receptora; senao oferece o simulado). Teste completo: `python tools/teste_ponta_a_ponta.py --mao --adulteracoes 50`. Roteiro: `docs/ROTEIRO_DEMO.md`.
+- Proximo: rodar o teste completo no hardware e registrar taxa de entrega, RSSI e 50/50 adulteracoes em MEDICOES; alcance simples (E8); ensaio de 30 min.
 - Declarar: assinatura na Heltec, trecho Uno -> Heltec sem autenticacao; SHT31 em 5 V no Uno (modulo com regulador).
 
 ## Maximizacao com o Fable (gatilho do usuario)
