@@ -158,7 +158,11 @@ function renderNode(last, node) {
     pill.innerHTML = icon("clock") + "<span>SILÊNCIO</span>";
     card.className = "kpi kpi-temp hero";
   }
-  if (!last) return;
+  if (!last) {
+    // Corrente vazia (inicio ou Restaurar demo): nao deixar a ultima leitura antiga na tela.
+    for (const id of ["temp", "hum", "seq", "rssi", "snr", "gps"]) $(id).textContent = "--";
+    return;
+  }
   $("temp").textContent = fmtNum(last.temp_c);
   $("hum").textContent = fmtNum(last.hum_pct, 1);
   // Posicao assinada no pacote; sem fix o no manda "invalido" e nunca uma posicao velha.
