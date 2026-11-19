@@ -161,6 +161,10 @@ function renderNode(last, node) {
   if (!last) return;
   $("temp").textContent = fmtNum(last.temp_c);
   $("hum").textContent = fmtNum(last.hum_pct, 1);
+  // Posicao assinada no pacote; sem fix o no manda "invalido" e nunca uma posicao velha.
+  $("gps").textContent = last.lat == null || last.lon == null
+    ? "sem fix"
+    : `${last.lat.toFixed(5)}, ${last.lon.toFixed(5)}`;
   $("seq").textContent = last.seq;
   $("rssi").textContent = last.rssi ?? "--";
   $("snr").textContent = last.snr == null ? "--" : fmtNum(last.snr, 1);
