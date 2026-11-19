@@ -28,6 +28,11 @@
 #define SENSOR_SCL 42
 #define SHT31_ADDR 0x44  // 0x45 se o pino ADDR estiver em nivel alto
 
+// ---- Prototipo com Arduino Uno (modo SENSOR_UNO, manual LACOR MNR de 18/11) ----
+// O D3 do Uno (5 V) passa por um divisor 3 x 1 kOhm; o ponto central vai ao GPIO41.
+// Neste modo o GPIO41 NAO e o SDA do sensor (o SHT31 esta no Uno).
+#define UNO_RX_PIN 41
+
 // ---- LED de alarme externo: anodo -> resistor 220 ohm -> GPIO; catodo no GND ----
 #define ALARM_LED 4
 

@@ -6,6 +6,7 @@
 #include <Wire.h>
 
 #include "cc_packet.h"
+#include "config.h"
 #include "pins.h"
 
 static Adafruit_SSD1306 oled(128, 64, &Wire, OLED_RST);
@@ -20,6 +21,7 @@ bool display_begin() {
   digitalWrite(ALARM_LED, LOW);
   Wire.begin(OLED_SDA, OLED_SCL);
   oled_ok = oled.begin(SSD1306_SWITCHCAPVCC, OLED_ADDR);
+  if (oled_ok) oled.setRotation(DISPLAY_ROTATION);
   if (oled_ok) {
     oled.setTextColor(SSD1306_WHITE);
     oled.setTextSize(1);
