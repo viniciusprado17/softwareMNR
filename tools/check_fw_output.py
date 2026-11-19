@@ -29,7 +29,15 @@ def read_lines(args):
         import serial
 
         end = time.time() + args.seconds
-        with serial.Serial(args.port, args.baud, timeout=1) as ser:
+        try:
+            ser = serial.Serial(args.port, args.baud, timeout=1)
+        except serial.SerialException:
+            from serial.tools import list_ports
+
+            ports = ", ".join(f"{p.device} ({p.description})" for p in list_ports.comports())
+            sys.exit(f"ERRO: nao abri {args.port}. Portas ligadas agora: {ports or 'nenhuma'}. "
+                     "Feche outro programa que use a porta e confira o cabo de dados.")
+        with ser:
             while time.time() < end:
                 line = ser.readline().decode("ascii", errors="replace").strip()
                 if line:
