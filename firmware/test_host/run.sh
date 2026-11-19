@@ -18,4 +18,9 @@ g++ -std=c++17 -O2 -Wall -Wextra -Werror \
   "$CORE"/cc_selftest.cpp "$BUILD/uECC.o" -o "$BUILD/test_core"
 
 "$BUILD/test_core" | tee "$BUILD/output.txt"
+
+# Interpretador da linha do Arduino Uno (prototipo com Uno + divisor no GPIO41).
+g++ -std=c++17 -O2 -Wall -Wextra -Werror -I"$CORE" "$HERE/test_uno.cpp" "$CORE"/cc_uno.cpp \
+  -o "$BUILD/test_uno"
+"$BUILD/test_uno"
 python3 "$ROOT/tools/check_fw_output.py" --vectors "$BUILD/output.txt"

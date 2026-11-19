@@ -71,6 +71,12 @@ A Tabela 3 do artigo (evolucoes propostas) e o roteiro: SHT31 real, latencia rea
 - **E3 travado (16/11):** SHT31-D ligado no protoboard (VIN laranja -> 3V3, GND marrom -> GND, SCL amarelo -> GPIO5, SDA vermelho -> GPIO4; nao e Wire1 41/42 do pins.h, mudou para 4/5 na montagem fisica). `firmware/bench/i2cscan` gravado, escaneado em 41/42 (padrao), 42/41 (trocado) e 4/5 (real): sempre `I2C,none`. Repetido ligando os fios direto no sensor, sem protoboard: continua `I2C,none`. Cores conferidas e batendo nos dois lados (sem fio trocado). Descartado ate aqui: pino errado no comando de scan, fio cruzado, protoboard.
 - Proximo passo ao retomar: trocar pelo segundo SHT31-D (reserva) ligando os mesmos 4 fios, para isolar se o problema e o sensor ou outra coisa; se sobrar duvida, testar continuidade com multimetro (3V3->VIN, GND->GND, GPIO4->SDA, GPIO5->SCL). Se o sensor continuar nao respondendo, considerar: solda fria nos 4 pontos da Heltec, ou decidir religar no Wire1 oficial (GPIO 41/42) em vez de 4/5 para ficar de acordo com `docs/ESPECIFICACAO.md` e `pins.h`.
 
+## Prototipo montado pela equipe (18/11) e integracao (19/11)
+- Montagem real: SHT31 e GPS no Arduino Uno; Uno manda texto `T:..C U:..% GPS:..` a 9600 pelo D3 -> divisor 3x1k -> GPIO41 da Heltec transmissora; LoRa 915 MHz -> Heltec receptora. Manual, guia e sketches originais em `prototipo_lacor/`.
+- Integracao: firmware `node` ganhou o ambiente `heltec_v3_node_uno` (`-DSENSOR_UNO=1`): le a linha do Uno (`cc_uno.cpp`, testado em `firmware/test_host`), decide, assina e transmite o pacote de 88 bytes. Receptora usa `firmware/receiver`. Nenhum fio muda; o Uno nao e regravado. Passo a passo: `docs/PROTOTIPO_UNO.md`.
+- Nao compilado aqui (PlatformIO bloqueado na sessao da nuvem): compilar no notebook ou CI antes de gravar.
+- Declarar: assinatura na Heltec, trecho Uno -> Heltec sem autenticacao; SHT31 em 5 V no Uno (modulo com regulador).
+
 ## Maximizacao com o Fable (gatilho do usuario)
 Quando o usuario disser **COMECAR MAXIMIZACAO** (com ou sem acento, qualquer caixa): rodar `bash tools/fable_preflight.sh`, e se estiver OK delegar a tarefa inteira de `docs/FABLE_TAREFA.md` a um agente `model: "fable"` (um so, na branch atual, sem worktree), seguindo o "Procedimento do Claude principal" do proprio arquivo (disparo e revisao). Sem a frase, **nao** disparar o Fable: ele consome muito. O firmware nao compila na maquina da sessao (registro do PlatformIO bloqueado): a prova e o CI.
 

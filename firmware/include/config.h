@@ -29,6 +29,15 @@
 #define TEMP_HIGH_C 8.0f
 #define TEMP_MARGIN_C 0.5f
 
+// ---- Prototipo com Arduino Uno (modo SENSOR_UNO) ----
+#define UNO_BAUD 9600
+#define UNO_MAX_AGE_MS 15000UL  // o Uno manda a cada ~5 s; mais velho que isso nao vira pacote
+
+// ---- OLED ----
+#ifndef DISPLAY_ROTATION
+#define DISPLAY_ROTATION 0  // 2 = de cabeca para baixo (placas montadas na caixa do prototipo)
+#endif
+
 // ---- Diagnostico ----
 #ifndef BENCH_SIGN_ON_BOOT
 #define BENCH_SIGN_ON_BOOT 1  // mede o tempo de assinatura (n = BENCH_SIGN_N) ao ligar

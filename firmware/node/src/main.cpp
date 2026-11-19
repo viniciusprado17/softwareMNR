@@ -103,6 +103,10 @@ void setup() {
   print_info("seq_inicial=%lu", (unsigned long)storage_last_seq());
 
   if (!sensor_begin()) Serial.println("ERR,sensor,SHT31 nao respondeu (tentara de novo)");
+#if SENSOR_UNO
+  print_info("sensor=uno_serial,pino=%d,baud=%d (SHT31 e GPS ligados ao Arduino Uno)", UNO_RX_PIN,
+             UNO_BAUD);
+#endif
 
   int16_t st = radio_begin();
   if (st != 0) {
@@ -129,6 +133,11 @@ static void ciclo() {
   r.lon_e6 = CC_GPS_INVALID;
 #if USE_GPS
   gps_fill(r);
+#else
+  if (m.ok && m.has_fix) {  // GPS ligado ao Uno (modo SENSOR_UNO)
+    r.lat_e6 = (int32_t)lround(m.lat * 1e6);
+    r.lon_e6 = (int32_t)lround(m.lon * 1e6);
+  }
 #endif
   tela.node_id = NODE_ID;
   tela.sensor_ok = m.ok;
@@ -203,6 +212,7 @@ void loop() {
 #if USE_GPS
   gps_poll();
 #endif
+  sensor_poll();
   led_update(last_status);
   if (millis() - last_sample_ms >= SAMPLE_INTERVAL_MS) {
     last_sample_ms += SAMPLE_INTERVAL_MS;

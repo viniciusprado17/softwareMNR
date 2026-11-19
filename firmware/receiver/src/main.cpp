@@ -39,7 +39,10 @@ void setup() {
   delay(50);
   Wire.begin(OLED_SDA, OLED_SCL);
   oled_ok = oled.begin(SSD1306_SWITCHCAPVCC, OLED_ADDR);
-  if (oled_ok) oled.setTextColor(SSD1306_WHITE);
+  if (oled_ok) {
+    oled.setRotation(DISPLAY_ROTATION);
+    oled.setTextColor(SSD1306_WHITE);
+  }
 
   SPI.begin(LORA_SCK, LORA_MISO, LORA_MOSI, LORA_NSS);
   int16_t st = radio.begin(LORA_FREQ_MHZ, LORA_BW_KHZ, LORA_SF, LORA_CR, LORA_SYNC_WORD,
