@@ -120,7 +120,13 @@ void setup() {
 #endif
   if (BENCH_SIGN_ON_BOOT && key_ok) bench_sign();
   enableLoopWDT();  // watchdog ativo: o loop nunca bloqueia por mais que alguns ms
+#if SENSOR_UNO
+  // O Uno manda a cada ~5 s: espera um ciclo para a primeira linha chegar, em vez de
+  // mostrar "SENSOR: ERRO" logo ao ligar (o que confundia com falha de ligacao).
+  last_sample_ms = millis();
+#else
   last_sample_ms = millis() - SAMPLE_INTERVAL_MS;  // primeira amostra imediata
+#endif
 }
 
 static void ciclo() {
