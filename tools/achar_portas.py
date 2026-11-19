@@ -43,17 +43,28 @@ def identifica(porta: str) -> str:
 
 
 def main() -> int:
+    quieto = "--so-porta" in sys.argv  # usado pelo iniciar_demo.bat
     portas = list(list_ports.comports())
     if not portas:
-        print("Nenhuma porta serial. Confira os cabos de dados.")
+        if not quieto:
+            print("Nenhuma porta serial. Confira os cabos de dados.")
         return 1
-    print(f"Lendo cada porta por ate {ESPERA_S} s...\n")
+    if not quieto:
+        print(f"Lendo cada porta por ate {ESPERA_S} s...\n")
     receptora = None
     for p in portas:
+        if quieto and p.vid != 0x10C4:  # so as Heltec (CP210x)
+            continue
         papel = identifica(p.device)
-        print(f"  {p.device:6} {p.description[:40]:40} -> {papel}")
+        if not quieto:
+            print(f"  {p.device:6} {p.description[:40]:40} -> {papel}")
         if papel.startswith("RECEPTORA"):
             receptora = p.device
+            if quieto:
+                break
+    if quieto:
+        print(receptora or "")
+        return 0 if receptora else 1
     print()
     if receptora:
         print("Abra a tela com:")

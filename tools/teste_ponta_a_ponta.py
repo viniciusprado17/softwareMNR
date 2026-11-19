@@ -93,6 +93,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--pacotes", type=int, default=3, help="pacotes reais a esperar (padrao 3)")
     p.add_argument("--timeout", type=float, default=0, help="segundos de espera (padrao: 15 s por pacote + 20)")
     p.add_argument("--mao", action="store_true", help="inclui o teste de segurar o sensor com a mao")
+    p.add_argument("--adulteracoes", type=int, default=1,
+                   help="quantas adulteracoes testar sobre o ultimo pacote real (artigo: 50)")
     p.add_argument("--sem-restaurar-fim", action="store_true", help="nao limpa a corrente no fim")
     args = p.parse_args(argv)
     api = Api(args.url)
@@ -166,9 +168,13 @@ def main(argv: list[str] | None = None) -> int:
 
     # 5. Adulteracao
     rel.log("\n5. Ataques")
-    r = api.post("/api/demo/tamper")
-    rel.item("pacote adulterado rejeitado", r["result"] == "assinatura_invalida",
-             f"{r['original_temp']:.2f} -> {r['forged_temp']:.2f} C: {r['result']}")
+    rejeitadas = 0
+    for _ in range(max(1, args.adulteracoes)):
+        r = api.post("/api/demo/tamper")
+        rejeitadas += r["result"] == "assinatura_invalida"
+    n = max(1, args.adulteracoes)
+    rel.item("pacote adulterado rejeitado", rejeitadas == n,
+             f"{rejeitadas}/{n} rejeitadas ({r['original_temp']:.2f} -> {r['forged_temp']:.2f} C: {r['result']})")
     # 6. Replay
     r = api.post("/api/demo/replay")
     rel.item("pacote reenviado rejeitado", r["result"] == "replay", f"seq {r['seq']}: {r['result']}")
