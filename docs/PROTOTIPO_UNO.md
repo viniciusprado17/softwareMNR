@@ -95,3 +95,16 @@ Precisa declarar:
 - Nunca ligar o D3 do Uno direto no GPIO41: o ESP32-S3 aceita no máximo 3,3 V. O divisor
   (cerca de 2/3 de 5 V, perto de 3,3 V) é obrigatório.
 - GND comum entre Uno e transmissora (fio roxo). Sem ele a serial vira lixo.
+
+## 7. Achados da bancada de 19/11
+
+- **Terra comum:** com Uno e transmissora em fontes diferentes, nenhuma linha do Uno chegava. Resolvido
+  com um fio direto do GND da Heltec (pela coluna dela na protoboard) ao GND do Uno, além do roxo.
+- **Powerbank desliga sozinho** quando a transmissora consome pouco. A Heltec reinicia e o OLED mostra
+  `SENSOR: ERRO` de forma intercalada. Na demonstração, alimentar a transmissora pelo notebook ou usar
+  um powerbank com modo de baixa corrente. Testar 5 minutos antes de confiar.
+- **Só um cabo USB-C de dados** funcionou; o outro só alimenta. A receptora precisa do cabo de dados
+  (serial para o gateway). Comprar um cabo de dados reserva antes da viagem.
+- **Uno conferido** pela serial (COM do Uno, 115200): linhas válidas a cada 5 s, sem `ERRO SHT31`;
+  GPS com sentenças válidas e sem fix em ambiente fechado.
+- Com o gateway aberto, nenhum outro programa pode abrir a porta da receptora (dá "Acesso negado").
